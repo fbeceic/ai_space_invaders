@@ -2,7 +2,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(SpriteRenderer))]
 [RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent(typeof(BoxCollider2D))]
+[RequireComponent(typeof(PolygonCollider2D))]
 public class Invader : MonoBehaviour
 {
     public Sprite[] animationSprites = new Sprite[0];

@@ -21,11 +21,10 @@ using UnityEditor.SceneManagement;
 [ExecuteAlways]
 public class StableDiffusionText2Image : StableDiffusionGenerator
 {
-    [ReadOnly]
-    public string guid = "";
-    
-    public string prompt;
-    public string negativePrompt;
+    [ReadOnly] public string guid = "";
+
+    public string prompt { get; set; }
+    public string negativePrompt { get; set; }
 
     /// <summary>
     /// List of samplers to display as Drop-Down in the inspector
@@ -40,11 +39,11 @@ public class StableDiffusionText2Image : StableDiffusionGenerator
             return sdc.samplers;
         }
     }
+
     /// <summary>
     /// Actual sampler selected in the drop-down list
     /// </summary>
-    [HideInInspector]
-    public int selectedSampler = 0;
+    [HideInInspector] public int selectedSampler = 0;
 
     public int width = 512;
     public int height = 512;
@@ -55,7 +54,6 @@ public class StableDiffusionText2Image : StableDiffusionGenerator
     public long generatedSeed = -1;
 
     string filename = "";
-
 
 
     /// <summary>
@@ -71,11 +69,11 @@ public class StableDiffusionText2Image : StableDiffusionGenerator
             return sdc.modelNames;
         }
     }
+
     /// <summary>
     /// Actual model selected in the drop-down list
     /// </summary>
-    [HideInInspector]
-    public int selectedModel = 0;
+    [HideInInspector] public int selectedModel = 0;
 
 
     /// <summary>
@@ -92,7 +90,6 @@ public class StableDiffusionText2Image : StableDiffusionGenerator
                 SDSettings settings = sdc.settings;
                 if (settings != null)
                 {
-
                     width = settings.width;
                     height = settings.height;
                     steps = settings.steps;
@@ -128,7 +125,7 @@ public class StableDiffusionText2Image : StableDiffusionGenerator
     }
 
     // Internally keep tracking if we are currently generating (prevent re-entry)
-    bool generating = false;
+    public bool generating = false;
 
     /// <summary>
     /// Callback function for the inspector Generate button.
@@ -181,7 +178,7 @@ public class StableDiffusionText2Image : StableDiffusionGenerator
         generating = true;
 
         SetupFolders();
-        
+
         // Set the model parameters
         yield return sdc.SetModelAsync(modelsList[selectedModel]);
 
@@ -190,7 +187,8 @@ public class StableDiffusionText2Image : StableDiffusionGenerator
         try
         {
             // Make a HTTP POST request to the Stable Diffusion server
-            httpWebRequest = (HttpWebRequest)WebRequest.Create(sdc.settings.StableDiffusionServerURL + sdc.settings.TextToImageAPI);
+            httpWebRequest =
+                (HttpWebRequest)WebRequest.Create(sdc.settings.StableDiffusionServerURL + sdc.settings.TextToImageAPI);
             httpWebRequest.ContentType = "application/json";
             httpWebRequest.Method = "POST";
 
@@ -202,7 +200,7 @@ public class StableDiffusionText2Image : StableDiffusionGenerator
                 string encodedCredentials = Convert.ToBase64String(bytesToEncode);
                 httpWebRequest.Headers.Add("Authorization", "Basic " + encodedCredentials);
             }
-            
+
             // Send the generation parameters along with the POST request
             using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
             {
@@ -261,7 +259,8 @@ public class StableDiffusionText2Image : StableDiffusionGenerator
                 // If no image, there was probably an error so abort
                 if (json.images == null || json.images.Length == 0)
                 {
-                    Debug.LogError("No image was return by the server. This should not happen. Verify that the server is correctly setup.");
+                    Debug.LogError(
+                        "No image was return by the server. This should not happen. Verify that the server is correctly setup.");
 
                     generating = false;
 #if UNITY_EDITOR
@@ -271,7 +270,7 @@ public class StableDiffusionText2Image : StableDiffusionGenerator
                 }
 
                 // Decode the image from Base64 string into an array of bytes
-                byte[] imageData = Convert.FromBase64String(json.images[0]);
+                byte[] imageData = Convert.FromBase64String(json.images[1]);
 
                 // Write it in the specified project output folder
                 using (FileStream imageFile = new FileStream(filename, FileMode.Create))

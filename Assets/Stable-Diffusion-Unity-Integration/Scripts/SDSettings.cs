@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -7,8 +8,7 @@ using UnityEngine;
 /// </summary>
 public class SDSettings : ScriptableObject
 {
-    [Header("AUTOMATIC1111 Settings")]
-    public string StableDiffusionServerURL = "http://127.0.0.1:7860";
+    [Header("AUTOMATIC1111 Settings")] public string StableDiffusionServerURL = "http://127.0.0.1:7860";
     public string ModelsAPI = "/sdapi/v1/sd-models";
     public string TextToImageAPI = "/sdapi/v1/txt2img";
     public string ImageToImageAPI = "/sdapi/v1/img2img";
@@ -21,14 +21,12 @@ public class SDSettings : ScriptableObject
     public int steps = 35;
     public float cfgScale = 7;
     public long seed = -1;
-    
-    [Header("API Settings")]
-    public bool useAuth = false;
+
+    [Header("API Settings")] public bool useAuth = false;
     public string user = "";
     public string pass = "";
-    
-    [Header("URP Settings")]
-    public bool useUniversalRenderPipeline = false;
+
+    [Header("URP Settings")] public bool useUniversalRenderPipeline = false;
 }
 
 /// <summary>
@@ -48,8 +46,6 @@ class SDParamsInTxt2Img
     public string layerdiffusion_fg_additional_prompt = "";
     public string layerdiffusion_bg_additional_prompt = "";
     public string layerdiffusion_blend_additional_prompt = "";
-
-    
     public bool enable_hr = false;
     public float denoising_strength = 0;
     public int firstphase_width = 0;
@@ -81,8 +77,41 @@ class SDParamsInTxt2Img
     public float s_tmax = 0;
     public float s_tmin = 0;
     public float s_noise = 1;
-    public bool override_settings_restore_afterwards = false;
+    public bool override_settings_restore_afterwards = true;
     public string sampler_index = "Euler";
+
+    public Dictionary<string, object> alwayson_scripts = new()
+    {
+        {
+            "LayerDiffuse", new Dictionary<string, object>
+            {
+                {
+                    "args", new object[]
+                    {
+                        new Dictionary<string, object>
+                        {
+                            { "method", 4 }
+                        }
+                    }
+                }
+            }
+        }
+    };
+    
+    Dictionary<string, object> extra_generation_params = new Dictionary<string, object>
+    {
+        { "layerdiffusion_enabled", true },
+        { "layerdiffusion_method", "(SD1.5) Only Generate Transparent Image (Attention Injection)" },
+        { "layerdiffusion_weight", 1 },
+        { "layerdiffusion_ending_step", 1 },
+        { "layerdiffusion_fg_image", false },
+        { "layerdiffusion_bg_image", false },
+        { "layerdiffusion_blend_image", false },
+        { "layerdiffusion_resize_mode", "Crop and Resize" },
+        { "layerdiffusion_fg_additional_prompt", "" },
+        { "layerdiffusion_bg_additional_prompt", "" },
+        { "layerdiffusion_blend_additional_prompt", "" }
+    };
 }
 
 /// <summary>
@@ -103,7 +132,7 @@ class SDParamsOutTxt2Img
     public string layerdiffusion_bg_additional_prompt = "";
     public string layerdiffusion_blend_additional_prompt = "";
 
-    
+
     public bool enable_hr = false;
     public float denoising_strength = 0;
     public int firstphase_width = 0;
@@ -136,14 +165,13 @@ class SDParamsOutTxt2Img
     public float s_tmin = 0;
     public float s_noise = 1;
     public SettingsOveride override_settings;
-    public bool override_settings_restore_afterwards = false;
+    public bool override_settings_restore_afterwards = true;
     public string[] script_args = { };
     public string sampler_index = "Euler";
     public string script_name = "";
 
     public class SettingsOveride
     {
-
     }
 }
 
@@ -155,7 +183,9 @@ class SDParamsInImg2Img
 {
     public string[] init_images = { "" };
     public int resize_mode = 0;
+
     public float denoising_strength = 0.75f;
+
     //    public string mask = ""; // including this throws a 500 Internal Server error
     public int mask_blur = 4;
     public int inpainting_fill = 0;
@@ -186,7 +216,7 @@ class SDParamsInImg2Img
     public float s_tmin = 0;
     public float s_noise = 1;
     public SettingsOveride override_settings;
-    public bool override_settings_restore_afterwards = false;
+    public bool override_settings_restore_afterwards = true;
     public string[] script_args = { };
     public string sampler_index = "Euler";
     public bool include_init_images = false;
@@ -194,7 +224,6 @@ class SDParamsInImg2Img
 
     public class SettingsOveride
     {
-
     }
 }
 
@@ -237,7 +266,7 @@ class SDParamsOutImg2Img
     public float s_tmin = 0;
     public float s_noise = 1;
     public SettingsOveride override_settings;
-    public bool override_settings_restore_afterwards = false;
+    public bool override_settings_restore_afterwards = true;
     public string[] script_args = { };
     public string sampler_index = "Euler";
     public bool include_init_images = false;
@@ -245,7 +274,6 @@ class SDParamsOutImg2Img
 
     public class SettingsOveride
     {
-
     }
 }
 
@@ -323,4 +351,3 @@ class SDProgress
     public string current_image;
     public string textinfo;
 }
-
