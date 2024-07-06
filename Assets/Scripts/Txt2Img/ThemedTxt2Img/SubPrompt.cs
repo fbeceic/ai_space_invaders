@@ -6,7 +6,7 @@ namespace Txt2Img.ThemedTxt2Img
     public class SubPrompt
     {
         public string Text { get; set; }
-        [CanBeNull] public Texture2D Result { get; set; }
+        [CanBeNull] public Sprite Result { get; set; }
         
         public bool IsExecuted => Result is not null;
     }

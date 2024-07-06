@@ -18,7 +18,7 @@ public class StableDiffusionGenerator : MonoBehaviour
     /// </summary>
     protected void UpdateGenerationProgress()
     {
-#if UNITY_EDITOR
+//#if UNITY_EDITOR
         // Stable diffusion API url for setting a model
         string url = sdc.settings.StableDiffusionServerURL + sdc.settings.ProgressAPI;
 
@@ -35,7 +35,7 @@ public class StableDiffusionGenerator : MonoBehaviour
 
             EditorUtility.DisplayProgressBar("Generation in progress", (progress*100).ToString("F1") + "%", progress);
         }
-#endif
+//#endif
     }
 
     /// <summary>
@@ -43,10 +43,10 @@ public class StableDiffusionGenerator : MonoBehaviour
     /// </summary>
     protected void UpdateGenerationProgressWithAuth()
     {
-        #if UNITY_EDITOR
+        //#if UNITY_EDITOR
             if (_updateProgressRunning != null) return;
             _updateProgressRunning = StartCoroutine(UpdateGenerationProgressWithAuthCor());
-        #endif
+        //#endif
     }
     
     private IEnumerator UpdateGenerationProgressWithAuthCor()

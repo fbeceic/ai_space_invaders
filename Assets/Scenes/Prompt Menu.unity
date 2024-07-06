@@ -907,6 +907,86 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 356478892}
   m_CullTransparentMesh: 1
+--- !u!1 &404323809
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 404323812}
+  - component: {fileID: 404323813}
+  - component: {fileID: 404323814}
+  m_Layer: 0
+  m_Name: MenuManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &404323812
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 404323809}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &404323813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 404323809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42cfe03b79c5443cb470727e5c3fa3c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &404323814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 404323809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c93d797f0c71fa4ebd6ac191e533b14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  settings: {fileID: 11400000, guid: 2f0a42d2a132f7144b35b4cabb576d34, type: 2}
+  samplers:
+  - Euler a
+  - Euler
+  - LMS
+  - Heun
+  - DPM2
+  - DPM2 a
+  - DPM++ 2S a
+  - DPM++ 2M
+  - DPM++ SDE
+  - DPM fast
+  - DPM adaptive
+  - LMS Karras
+  - DPM2 Karras
+  - DPM2 a Karras
+  - DPM++ 2S a Karras
+  - DPM++ 2M Karras
+  - DPM++ SDE Karras
+  - DDIM
+  - PLMS
+  modelNames:
+  - realisticVisionV51_v51VAE
 --- !u!1 &458328277
 GameObject:
   m_ObjectHideFlags: 0
@@ -2416,7 +2496,7 @@ GameObject:
   - component: {fileID: 1151306911}
   - component: {fileID: 1151306914}
   m_Layer: 5
-  m_Name: Button
+  m_Name: GenerateButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3514,3 +3594,4 @@ SceneRoots:
   m_Roots:
   - {fileID: 2089399863}
   - {fileID: 1294819301}
+  - {fileID: 404323812}

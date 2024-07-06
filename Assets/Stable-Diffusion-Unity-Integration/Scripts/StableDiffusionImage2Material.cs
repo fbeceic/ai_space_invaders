@@ -242,7 +242,7 @@ public class StableDiffusionImage2Material : StableDiffusionGenerator
             if (root == "" || !Directory.Exists(root))
                 root = Application.streamingAssetsPath;
             string mat = Path.Combine(root, "SDMaterials");
-            filename = Path.Combine(mat, guid + ".png");
+            filename = Path.Combine(mat, prompt + ".png");
 
             // If folders not already exists, create them
             if (!Directory.Exists(root))
