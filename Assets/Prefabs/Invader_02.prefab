@@ -5,8 +5,25 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2080397703863518831, guid: 21f865cb325c39a42ae05fa853c24160, type: 3}
+      propertyPath: m_SpriteTilingProperty.pivot.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2080397703863518831, guid: 21f865cb325c39a42ae05fa853c24160, type: 3}
+      propertyPath: m_SpriteTilingProperty.pivot.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2080397703863518831, guid: 21f865cb325c39a42ae05fa853c24160, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.x
+      value: 1.28
+      objectReference: {fileID: 0}
+    - target: {fileID: 2080397703863518831, guid: 21f865cb325c39a42ae05fa853c24160, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.y
+      value: 1.28
+      objectReference: {fileID: 0}
     - target: {fileID: 2191486796875677341, guid: 21f865cb325c39a42ae05fa853c24160, type: 3}
       propertyPath: score
       value: 20
@@ -31,13 +48,33 @@ PrefabInstance:
       propertyPath: animationSprites.Array.data[1]
       value: 
       objectReference: {fileID: 21300000, guid: f71a1796fdbee8e49b6f314e661ba7e1, type: 3}
+    - target: {fileID: 2510072697461197924, guid: 21f865cb325c39a42ae05fa853c24160, type: 3}
+      propertyPath: guid
+      value: 2437d477-b29a-431c-b832-dcddc47dcc67
+      objectReference: {fileID: 0}
+    - target: {fileID: 2510072697461197924, guid: 21f865cb325c39a42ae05fa853c24160, type: 3}
+      propertyPath: width
+      value: 512
+      objectReference: {fileID: 0}
+    - target: {fileID: 2510072697461197924, guid: 21f865cb325c39a42ae05fa853c24160, type: 3}
+      propertyPath: height
+      value: 512
+      objectReference: {fileID: 0}
+    - target: {fileID: 2510072697461197924, guid: 21f865cb325c39a42ae05fa853c24160, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2510072697461197924, guid: 21f865cb325c39a42ae05fa853c24160, type: 3}
+      propertyPath: generatedSeed
+      value: 1992557857
+      objectReference: {fileID: 0}
     - target: {fileID: 8087897171543711280, guid: 21f865cb325c39a42ae05fa853c24160, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: faa33742ca0e31347b439b55fb7cecfd, type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 8087897171543711280, guid: 21f865cb325c39a42ae05fa853c24160, type: 3}
       propertyPath: m_WasSpriteAssigned
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8087897171543711281, guid: 21f865cb325c39a42ae05fa853c24160, type: 3}
       propertyPath: m_RootOrder
@@ -95,5 +132,9 @@ PrefabInstance:
       propertyPath: m_SpriteTilingProperty.oldSize.x
       value: 1.375
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2510072697461197924, guid: 21f865cb325c39a42ae05fa853c24160, type: 3}
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 21f865cb325c39a42ae05fa853c24160, type: 3}

@@ -1,3 +1,4 @@
+using Txt2Img.ThemedTxt2Img;
 using UnityEngine;
 
 public class Invaders : MonoBehaviour
@@ -26,6 +27,7 @@ public class Invaders : MonoBehaviour
 
     private void CreateInvaderGrid()
     {
+        var inputPrompts = ThemedTxt2Img.Instance.inputPrompts;
         for (int i = 0; i < rows; i++)
         {
             float width = 2f * (columns - 1);
@@ -36,8 +38,15 @@ public class Invaders : MonoBehaviour
 
             for (int j = 0; j < columns; j++)
             {
-                // Create a new invader and parent it to this transform
-                Invader invader = Instantiate(prefabs[i], transform);
+                var prefabToInstantiate = prefabs[i];
+
+                Invader invader = Instantiate(prefabToInstantiate, transform);
+                var diffusionGenerator =
+                    invader.gameObject.GetComponent<StableDiffusionText2Image>();
+                var matchingPrompt = inputPrompts.Find(input => input.Theme == diffusionGenerator.PromptTheme);
+                invader.gameObject.GetComponent<SpriteRenderer>().sprite = matchingPrompt.Result;
+
+                invader.ApplyGeneratedSprite(matchingPrompt.Result);
 
                 // Calculate and set the position of the invader in the row
                 Vector3 position = rowPosition;

@@ -8,7 +8,7 @@ using UnityEngine;
 using System.Linq;
 using System.Text;
 using UnityEngine.UI;
-using System.Threading.Tasks;
+using Txt2Img.Util;
 using UnityEngine.Networking;
 
 /// <summary>
@@ -22,6 +22,7 @@ public class StableDiffusionText2Image : StableDiffusionGenerator
     // Backing fields with SerializeField attribute to expose them in the Inspector
     [SerializeField] private string prompt;
     [SerializeField] private string negativePrompt;
+    [SerializeField] private PromptTheme promptTheme;
 
     // Public properties to access and modify the private backing fields
     public string Prompt
@@ -40,6 +41,12 @@ public class StableDiffusionText2Image : StableDiffusionGenerator
     {
         get => guid;
         set => guid = value;
+    }
+
+    public PromptTheme PromptTheme
+    {
+        get => promptTheme;
+        set => promptTheme = value;
     }
 
     HttpWebRequest txt2ImgWebRequest;
@@ -173,7 +180,7 @@ public class StableDiffusionText2Image : StableDiffusionGenerator
             if (root == "" || !Directory.Exists(root))
                 root = Application.streamingAssetsPath;
             string mat = Path.Combine(root, "SDImages");
-            filename = Path.Combine(mat, guid + ".png");
+            filename = Path.Combine(mat, $"{promptTheme.ToString().ToLower()}_{prompt.Split(", ")[0]}.png");
 
             // If folders not already exists, create them
             if (!Directory.Exists(root))
@@ -216,8 +223,13 @@ public class StableDiffusionText2Image : StableDiffusionGenerator
                 tiling = false,
                 sampler_name = selectedSampler >= 0 && selectedSampler < samplersList.Length
                     ? samplersList[selectedSampler]
-                    : null
+                    : null,
             };
+
+            if (promptTheme == PromptTheme.Background)
+            {
+                sd.alwayson_scripts = new Dictionary<string, object>();
+            }
 
             string json = JsonConvert.SerializeObject(sd);
             byte[] bodyRaw = Encoding.UTF8.GetBytes(json);
@@ -267,7 +279,9 @@ public class StableDiffusionText2Image : StableDiffusionGenerator
                 }
 
                 // Decode the image from Base64 string into an array of bytes
-                byte[] imageData = Convert.FromBase64String(jsonResponse.images[1]);
+                byte[] imageData = Convert.FromBase64String(promptTheme == PromptTheme.Background
+                    ? jsonResponse.images[0]
+                    : jsonResponse.images[1]);
 
                 // Write it in the specified project output folder
                 File.WriteAllBytes(filename, imageData);
@@ -341,7 +355,7 @@ public class StableDiffusionText2Image : StableDiffusionGenerator
             // Write it in the specified project output folder
             using (FileStream imageFile = new FileStream(filename, FileMode.Create))
             {
-               imageFile.WriteAsync(imageData, 0, imageData.Length);
+                imageFile.WriteAsync(imageData, 0, imageData.Length);
             }
 
             try
@@ -383,17 +397,31 @@ public class StableDiffusionText2Image : StableDiffusionGenerator
             // Convert the Texture2D to a Sprite
             Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
 
-            // Get the Sprite Renderer component
-            SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
-
-            // Assign the sprite to the Sprite Renderer component
-            if (spriteRenderer != null)
+            if (promptTheme == PromptTheme.Background)
             {
-                spriteRenderer.sprite = sprite;
+                Image image = GetComponent<Image>();
+
+                if (image != null)
+                {
+                    image.sprite = sprite;
+                }
+                else
+                {
+                    Debug.LogWarning("SpriteRenderer component not found on the GameObject.");
+                }
             }
             else
             {
-                Debug.LogWarning("SpriteRenderer component not found on the GameObject.");
+                SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+
+                if (spriteRenderer != null)
+                {
+                    spriteRenderer.sprite = sprite;
+                }
+                else
+                {
+                    Debug.LogWarning("SpriteRenderer component not found on the GameObject.");
+                }
             }
         }
         catch (Exception e)

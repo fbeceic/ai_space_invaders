@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 
 /// <summary>
@@ -35,17 +36,17 @@ public class SDSettings : ScriptableObject
 /// </summary>
 class SDParamsInTxt2Img
 {
-    public bool layerdiffusion_enabled = true;
-    public string layerdiffusion_method = "(SD1.5) Only Generate Transparent Image (Attention Injection)";
-    public string layerdiffusion_resize_mode = "Crop and Resize";
-    public float layerdiffusion_weight = 1;
-    public float layerdiffusion_ending_step = 1;
-    public bool layerdiffusion_fg_image = false;
-    public bool layerdiffusion_bg_image = false;
-    public bool layerdiffusion_blend_image = false;
-    public string layerdiffusion_fg_additional_prompt = "";
-    public string layerdiffusion_bg_additional_prompt = "";
-    public string layerdiffusion_blend_additional_prompt = "";
+    // public bool layerdiffusion_enabled = true;
+    // public string layerdiffusion_method = "(SD1.5) Only Generate Transparent Image (Attention Injection)";
+    // public string layerdiffusion_resize_mode = "Crop and Resize";
+    // public float layerdiffusion_weight = 1;
+    // public float layerdiffusion_ending_step = 1;
+    // public bool layerdiffusion_fg_image = false;
+    // public bool layerdiffusion_bg_image = false;
+    // public bool layerdiffusion_blend_image = false;
+    // public string layerdiffusion_fg_additional_prompt = "";
+    // public string layerdiffusion_bg_additional_prompt = "";
+    // public string layerdiffusion_blend_additional_prompt = "";
     public bool enable_hr = false;
     public float denoising_strength = 0;
     public int firstphase_width = 0;
@@ -80,7 +81,7 @@ class SDParamsInTxt2Img
     public bool override_settings_restore_afterwards = true;
     public string sampler_index = "Euler";
 
-    public Dictionary<string, object> alwayson_scripts = new()
+    [CanBeNull] public Dictionary<string, object> alwayson_scripts = new()
     {
         {
             "LayerDiffuse", new Dictionary<string, object>
@@ -98,20 +99,20 @@ class SDParamsInTxt2Img
         }
     };
     
-    Dictionary<string, object> extra_generation_params = new Dictionary<string, object>
-    {
-        { "layerdiffusion_enabled", true },
-        { "layerdiffusion_method", "(SD1.5) Only Generate Transparent Image (Attention Injection)" },
-        { "layerdiffusion_weight", 1 },
-        { "layerdiffusion_ending_step", 1 },
-        { "layerdiffusion_fg_image", false },
-        { "layerdiffusion_bg_image", false },
-        { "layerdiffusion_blend_image", false },
-        { "layerdiffusion_resize_mode", "Crop and Resize" },
-        { "layerdiffusion_fg_additional_prompt", "" },
-        { "layerdiffusion_bg_additional_prompt", "" },
-        { "layerdiffusion_blend_additional_prompt", "" }
-    };
+    // Dictionary<string, object> extra_generation_params = new Dictionary<string, object>
+    // {
+    //     { "layerdiffusion_enabled", true },
+    //     { "layerdiffusion_method", "(SD1.5) Only Generate Transparent Image (Attention Injection)" },
+    //     { "layerdiffusion_weight", 1 },
+    //     { "layerdiffusion_ending_step", 1 },
+    //     { "layerdiffusion_fg_image", false },
+    //     { "layerdiffusion_bg_image", false },
+    //     { "layerdiffusion_blend_image", false },
+    //     { "layerdiffusion_resize_mode", "Crop and Resize" },
+    //     { "layerdiffusion_fg_additional_prompt", "" },
+    //     { "layerdiffusion_bg_additional_prompt", "" },
+    //     { "layerdiffusion_blend_additional_prompt", "" }
+    // };
 }
 
 /// <summary>
@@ -120,17 +121,17 @@ class SDParamsInTxt2Img
 /// </summary>
 class SDParamsOutTxt2Img
 {
-    public bool layerdiffusion_enabled = true;
-    public string layerdiffusion_method = "(SD1.5) Only Generate Transparent Image (Attention Injection)";
-    public string layerdiffusion_resize_mode = "Crop and Resize";
-    public float layerdiffusion_weight = 1;
-    public float layerdiffusion_ending_step = 1;
-    public bool layerdiffusion_fg_image = false;
-    public bool layerdiffusion_bg_image = false;
-    public bool layerdiffusion_blend_image = false;
-    public string layerdiffusion_fg_additional_prompt = "";
-    public string layerdiffusion_bg_additional_prompt = "";
-    public string layerdiffusion_blend_additional_prompt = "";
+    // public bool layerdiffusion_enabled = true;
+    // public string layerdiffusion_method = "(SD1.5) Only Generate Transparent Image (Attention Injection)";
+    // public string layerdiffusion_resize_mode = "Crop and Resize";
+    // public float layerdiffusion_weight = 1;
+    // public float layerdiffusion_ending_step = 1;
+    // public bool layerdiffusion_fg_image = false;
+    // public bool layerdiffusion_bg_image = false;
+    // public bool layerdiffusion_blend_image = false;
+    // public string layerdiffusion_fg_additional_prompt = "";
+    // public string layerdiffusion_bg_additional_prompt = "";
+    // public string layerdiffusion_blend_additional_prompt = "";
 
 
     public bool enable_hr = false;

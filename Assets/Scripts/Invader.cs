@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(SpriteRenderer))]
@@ -42,6 +43,11 @@ public class Invader : MonoBehaviour
         } else if (other.gameObject.layer == LayerMask.NameToLayer("Boundary")) {
             GameManager.Instance.OnBoundaryReached();
         }
+    }
+
+    public void ApplyGeneratedSprite(Sprite sprite)
+    {
+        animationSprites = new[] { sprite };
     }
 
 }

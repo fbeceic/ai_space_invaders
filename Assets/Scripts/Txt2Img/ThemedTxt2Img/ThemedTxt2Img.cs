@@ -1,7 +1,8 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
+using Txt2Img.Util;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -14,71 +15,95 @@ namespace Txt2Img.ThemedTxt2Img
 
         public List<TMP_InputField> inputFields;
 
-        private List<SubPrompt> inputSubPrompts;
+        public List<Prompt> inputPrompts;
+
+        public static ThemedTxt2Img Instance;
+
+        private void Awake()
+        {
+            Instance = this;
+            diffusionGenerators = Resources.FindObjectsOfTypeAll<StableDiffusionText2Image>()
+                .Where(obj => obj.isActiveAndEnabled).ToList();
+            DontDestroyOnLoad(gameObject);
+        }
 
         public void StartTxt2ImgGeneration()
         {
-            inputFields = new List<TMP_InputField>(FindObjectsOfType<TMP_InputField>());
             inputFields.Sort((x, y) => string.Compare(x.name, y.name, StringComparison.OrdinalIgnoreCase));
-            diffusionGenerators = new List<StableDiffusionText2Image>(FindObjectsOfType<StableDiffusionText2Image>());
-
-            GetInputSubPrompts();
-            RunSubPrompts();
+            SetInputPrompts();
+            RunPrompts();
         }
 
-        public void GetInputSubPrompts()
+        public void SetInputPrompts()
         {
-            List<SubPrompt> subPrompts = new();
+            List<Prompt> prompts = new();
             foreach (var inputField in inputFields)
             {
-                subPrompts.Add(new SubPrompt { Text = inputField.text });
+                var fieldTheme = inputField.GetComponent<InputPrompt>().promptTheme;
+                prompts.Add(new Prompt { Text = inputField.text, Theme = fieldTheme });
             }
 
-            inputSubPrompts = subPrompts;
+            inputPrompts = prompts;
         }
 
-        public void RunSubPrompts()
+        public void RunPrompts()
         {
-            // TODO: map this onto sprites
             foreach (var diffusionGenerator in diffusionGenerators)
             {
-                foreach (var subPrompt in inputSubPrompts)
+                var matchingPrompt = inputPrompts.Find(input => input.Theme == diffusionGenerator.PromptTheme);
+
+                diffusionGenerator.PromptTheme = matchingPrompt.Theme;
+                diffusionGenerator.Prompt = ExtendPrompt(matchingPrompt.Text, matchingPrompt.Theme, PromptType.Main);
+                diffusionGenerator.NegativePrompt = ExtendPrompt("", matchingPrompt.Theme, PromptType.Negative);
+                diffusionGenerator.GuidField = Guid.NewGuid().ToString();
+
+                if (!diffusionGenerator.generating)
                 {
-                    diffusionGenerator.Prompt = subPrompt.Text;
-                    diffusionGenerator.GuidField = Guid.NewGuid().ToString();
+                    StartCoroutine(diffusionGenerator.GenerateAsync());
+                }
 
-                    if (!diffusionGenerator.generating)
-                    {
-                        StartCoroutine(diffusionGenerator.GenerateAsync());
-                    }
+                // Wait for the generation to complete
+                while (diffusionGenerator.generating)
+                {
+                    // You can add progress indication here if needed
+                }
 
-                    // Wait for the generation to complete
-                    while (diffusionGenerator.generating)
-                    {
-                        // You can add progress indication here if needed
-                    }
+                if (matchingPrompt.Theme == PromptTheme.Background &&
+                    diffusionGenerator.gameObject.GetComponent<Image>() != null)
+                {
+                    matchingPrompt.Result = diffusionGenerator.gameObject.GetComponent<Image>().sprite;
+                }
+                else if (diffusionGenerator.gameObject.GetComponent<SpriteRenderer>() != null)
+                {
+                    matchingPrompt.Result = diffusionGenerator.gameObject.GetComponent<SpriteRenderer>().sprite;
+                }
+            }
 
-                    // Set the result image
-                    subPrompt.Result = diffusionGenerator.GetComponent<SpriteRenderer>().sprite;
+            EnableObjectsAndAssignTextures(inputPrompts);
+            MenuManager.Instance.ShowMenu(1);
+        }
+
+        private static string ExtendPrompt(string prompt, PromptTheme theme, PromptType type)
+            => (type == PromptType.Main ? prompt : "") + ", " +
+               string.Join(", ", PromptExtensions.Extensions.GetValue(theme).GetValue(type));
+
+        private static void EnableObjectsAndAssignTextures(List<Prompt> inputPrompts)
+        {
+            var diffusionGenerators = FindObjectsOfType<StableDiffusionText2Image>().ToList();
+
+            foreach (var diffusionGenerator in diffusionGenerators)
+            {
+                var matchingPrompt = inputPrompts.Find(input => input.Theme == diffusionGenerator.PromptTheme);
+                if (diffusionGenerator.gameObject.GetComponent<Image>() != null)
+                {
+                    diffusionGenerator.gameObject.GetComponent<Image>().sprite = matchingPrompt.Result;
+                }
+
+                if (diffusionGenerator.gameObject.GetComponent<Invader>() != null)
+                {
+                    diffusionGenerator.gameObject.GetComponent<Invader>().ApplyGeneratedSprite(matchingPrompt.Result);
                 }
             }
         }
-
-        private string ExtendSubPrompt(string subprompt, string type)
-        {
-            switch (type)
-            {
-                case "background":
-                    return subprompt + ",";
-                case "player":
-                    return subprompt;
-                case "enemy":
-                    return subprompt;
-                case "projectile":
-                    return subprompt;
-                case "shield":
-                    return subprompt;
-            }
-        } 
     }
 }

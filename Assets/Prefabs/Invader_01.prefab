@@ -5,6 +5,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1788622360293551478, guid: 92725eb3a0283d641835e37afa65bda1, type: 3}
@@ -70,14 +71,42 @@ PrefabInstance:
     - target: {fileID: 1788622360293551481, guid: 92725eb3a0283d641835e37afa65bda1, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: b5f20663b636d4b4eb010e7fb8012499, type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 1788622360293551481, guid: 92725eb3a0283d641835e37afa65bda1, type: 3}
       propertyPath: m_WasSpriteAssigned
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1788622360293551482, guid: 92725eb3a0283d641835e37afa65bda1, type: 3}
       propertyPath: m_Name
       value: Invader_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 5348619388523462445, guid: 92725eb3a0283d641835e37afa65bda1, type: 3}
+      propertyPath: guid
+      value: ec7248f8-8562-4862-8d6c-e5db8993fc9e
+      objectReference: {fileID: 0}
+    - target: {fileID: 5348619388523462445, guid: 92725eb3a0283d641835e37afa65bda1, type: 3}
+      propertyPath: width
+      value: 512
+      objectReference: {fileID: 0}
+    - target: {fileID: 5348619388523462445, guid: 92725eb3a0283d641835e37afa65bda1, type: 3}
+      propertyPath: height
+      value: 512
+      objectReference: {fileID: 0}
+    - target: {fileID: 5348619388523462445, guid: 92725eb3a0283d641835e37afa65bda1, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5348619388523462445, guid: 92725eb3a0283d641835e37afa65bda1, type: 3}
+      propertyPath: generatedSeed
+      value: 801113085
+      objectReference: {fileID: 0}
+    - target: {fileID: 8372336427638404390, guid: 92725eb3a0283d641835e37afa65bda1, type: 3}
+      propertyPath: m_SpriteTilingProperty.newSize.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8372336427638404390, guid: 92725eb3a0283d641835e37afa65bda1, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.x
+      value: 1.28
       objectReference: {fileID: 0}
     - target: {fileID: 8540571529431895508, guid: 92725eb3a0283d641835e37afa65bda1, type: 3}
       propertyPath: score
@@ -103,5 +132,9 @@ PrefabInstance:
       propertyPath: animationSprites.Array.data[1]
       value: 
       objectReference: {fileID: 21300000, guid: 695deb1fbb284dd46be3ecd6ad6b2c49, type: 3}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5348619388523462445, guid: 92725eb3a0283d641835e37afa65bda1, type: 3}
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 92725eb3a0283d641835e37afa65bda1, type: 3}
