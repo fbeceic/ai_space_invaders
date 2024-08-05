@@ -4,7 +4,6 @@ using System.Linq;
 using TMPro;
 using Txt2Img.Util;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Txt2Img.ThemedTxt2Img
@@ -23,7 +22,7 @@ namespace Txt2Img.ThemedTxt2Img
         {
             Instance = this;
             diffusionGenerators = Resources.FindObjectsOfTypeAll<StableDiffusionText2Image>()
-                .Where(obj => obj.isActiveAndEnabled).ToList();
+                .Where(instance => instance.gameObject.scene.IsValid()).ToList();
             DontDestroyOnLoad(gameObject);
         }
 
@@ -39,7 +38,7 @@ namespace Txt2Img.ThemedTxt2Img
             List<Prompt> prompts = new();
             foreach (var inputField in inputFields)
             {
-                var fieldTheme = inputField.GetComponent<InputPrompt>().promptTheme;
+                var fieldTheme = inputField.GetComponent<PromptThemedObject>().promptTheme;
                 prompts.Add(new Prompt { Text = inputField.text, Theme = fieldTheme });
             }
 
@@ -68,8 +67,7 @@ namespace Txt2Img.ThemedTxt2Img
                     // You can add progress indication here if needed
                 }
 
-                if (matchingPrompt.Theme == PromptTheme.Background &&
-                    diffusionGenerator.gameObject.GetComponent<Image>() != null)
+                if (diffusionGenerator.gameObject.GetComponent<Image>() != null)
                 {
                     matchingPrompt.Result = diffusionGenerator.gameObject.GetComponent<Image>().sprite;
                 }
@@ -79,29 +77,26 @@ namespace Txt2Img.ThemedTxt2Img
                 }
             }
 
-            EnableObjectsAndAssignTextures(inputPrompts);
             MenuManager.Instance.ShowMenu(1);
+            EnableObjectsAndAssignTextures(inputPrompts);
         }
 
-        private static string ExtendPrompt(string prompt, PromptTheme theme, PromptType type)
+        public static string ExtendPrompt(string prompt, PromptTheme theme, PromptType type)
             => (type == PromptType.Main ? prompt : "") + ", " +
                string.Join(", ", PromptExtensions.Extensions.GetValue(theme).GetValue(type));
 
         private static void EnableObjectsAndAssignTextures(List<Prompt> inputPrompts)
         {
-            var diffusionGenerators = FindObjectsOfType<StableDiffusionText2Image>().ToList();
+            var promptResults = FindObjectsOfType<PromptResult>().ToList();
 
-            foreach (var diffusionGenerator in diffusionGenerators)
+            foreach (var promptResult in promptResults)
             {
-                var matchingPrompt = inputPrompts.Find(input => input.Theme == diffusionGenerator.PromptTheme);
-                if (diffusionGenerator.gameObject.GetComponent<Image>() != null)
-                {
-                    diffusionGenerator.gameObject.GetComponent<Image>().sprite = matchingPrompt.Result;
-                }
+                var matchingPrompt = inputPrompts.Find(input => input.Theme == promptResult.promptTheme);
+                promptResult.ApplyPromptFeatures(matchingPrompt.Text, matchingPrompt.Result);
 
-                if (diffusionGenerator.gameObject.GetComponent<Invader>() != null)
+                if (promptResult.gameObject.GetComponent<Invader>() != null)
                 {
-                    diffusionGenerator.gameObject.GetComponent<Invader>().ApplyGeneratedSprite(matchingPrompt.Result);
+                    promptResult.gameObject.GetComponent<Invader>().ApplyGeneratedSprite(matchingPrompt.Result);
                 }
             }
         }

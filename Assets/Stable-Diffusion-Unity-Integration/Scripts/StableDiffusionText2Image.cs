@@ -7,6 +7,8 @@ using System.Net;
 using UnityEngine;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using JetBrains.Annotations;
 using UnityEngine.UI;
 using Txt2Img.Util;
 using UnityEngine.Networking;
@@ -198,7 +200,7 @@ public class StableDiffusionText2Image : StableDiffusionGenerator
         }
     }
 
-    public IEnumerator GenerateAsync()
+    public IEnumerator GenerateAsync([CanBeNull] Action<int> loadingCallback = null)
     {
         generating = true;
 
@@ -208,8 +210,6 @@ public class StableDiffusionText2Image : StableDiffusionGenerator
         sdc.SetModelAsync(modelsList[selectedModel]);
 
         // Generate the image
-        try
-        {
             // Create the request body
             SDParamsInTxt2Img sd = new SDParamsInTxt2Img
             {
@@ -229,94 +229,90 @@ public class StableDiffusionText2Image : StableDiffusionGenerator
             if (promptTheme == PromptTheme.Background)
             {
                 sd.alwayson_scripts = new Dictionary<string, object>();
+                // sd.width = 1280;
+                // sd.height = 1280;
             }
 
             string json = JsonConvert.SerializeObject(sd);
             byte[] bodyRaw = Encoding.UTF8.GetBytes(json);
 
-            using (UnityWebRequest request =
-                   new UnityWebRequest(sdc.settings.StableDiffusionServerURL + sdc.settings.TextToImageAPI, "POST"))
+            using var request =
+                new UnityWebRequest(sdc.settings.StableDiffusionServerURL + sdc.settings.TextToImageAPI, "POST");
+            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", "application/json");
+
+            // Add auth-header to request
+            if (sdc.settings.useAuth && !sdc.settings.user.Equals("") && !sdc.settings.pass.Equals(""))
             {
-                request.uploadHandler = new UploadHandlerRaw(bodyRaw);
-                request.downloadHandler = new DownloadHandlerBuffer();
-                request.SetRequestHeader("Content-Type", "application/json");
+                string encodedCredentials =
+                    Convert.ToBase64String(Encoding.UTF8.GetBytes(sdc.settings.user + ":" + sdc.settings.pass));
+                request.SetRequestHeader("Authorization", "Basic " + encodedCredentials);
+            }
 
-                // Add auth-header to request
-                if (sdc.settings.useAuth && !sdc.settings.user.Equals("") && !sdc.settings.pass.Equals(""))
+            // Send the request and wait for the response
+            request.SendWebRequest();
+            while (!request.isDone || request.result == UnityWebRequest.Result.InProgress)
+            {
+                loadingCallback?.Invoke(1);
+                Debug.Log("Waiting for the request to complete...");
+            }
+
+            if (request.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError("Error: " + request.error);
+                generating = false;
+                yield break;
+            }
+
+            // Decode the response as a JSON string
+            string result = request.downloadHandler.text;
+
+            // Deserialize the JSON string into a data structure
+            SDResponseTxt2Img jsonResponse = JsonConvert.DeserializeObject<SDResponseTxt2Img>(result);
+
+            // If no image, there was probably an error so abort
+            if (jsonResponse.images == null || jsonResponse.images.Length == 0)
+            {
+                Debug.LogError(
+                    "No image was returned by the server. This should not happen. Verify that the server is correctly set up.");
+                generating = false;
+                yield break;
+            }
+
+            // Decode the image from Base64 string into an array of bytes
+            byte[] imageData = Convert.FromBase64String(promptTheme == PromptTheme.Background
+                ? jsonResponse.images[0]
+                : jsonResponse.images[1]);
+
+            // Write it in the specified project output folder
+            File.WriteAllBytes(filename, imageData);
+
+            try
+            {
+                // Read back the image into a texture
+                if (File.Exists(filename))
                 {
-                    string encodedCredentials =
-                        Convert.ToBase64String(Encoding.UTF8.GetBytes(sdc.settings.user + ":" + sdc.settings.pass));
-                    request.SetRequestHeader("Authorization", "Basic " + encodedCredentials);
+                    Texture2D texture = new Texture2D(2, 2);
+                    texture.LoadImage(imageData);
+                    texture.Apply();
+
+                    LoadIntoImage(texture);
                 }
 
-                // Send the request and wait for the response
-                request.SendWebRequest();
-                while (!request.isDone || request.result == UnityWebRequest.Result.InProgress)
+                // Read the generation info back (only seed should have changed, as the generation picked a particular seed)
+                if (!string.IsNullOrEmpty(jsonResponse.info))
                 {
-                    Debug.Log("Waiting for the request to complete...");
-                }
+                    SDParamsOutTxt2Img info = JsonConvert.DeserializeObject<SDParamsOutTxt2Img>(jsonResponse.info);
 
-                if (request.result != UnityWebRequest.Result.Success)
-                {
-                    Debug.LogError("Error: " + request.error);
-                    generating = false;
-                    yield break;
-                }
-
-                // Decode the response as a JSON string
-                string result = request.downloadHandler.text;
-
-                // Deserialize the JSON string into a data structure
-                SDResponseTxt2Img jsonResponse = JsonConvert.DeserializeObject<SDResponseTxt2Img>(result);
-
-                // If no image, there was probably an error so abort
-                if (jsonResponse.images == null || jsonResponse.images.Length == 0)
-                {
-                    Debug.LogError(
-                        "No image was returned by the server. This should not happen. Verify that the server is correctly set up.");
-                    generating = false;
-                    yield break;
-                }
-
-                // Decode the image from Base64 string into an array of bytes
-                byte[] imageData = Convert.FromBase64String(promptTheme == PromptTheme.Background
-                    ? jsonResponse.images[0]
-                    : jsonResponse.images[1]);
-
-                // Write it in the specified project output folder
-                File.WriteAllBytes(filename, imageData);
-
-                try
-                {
-                    // Read back the image into a texture
-                    if (File.Exists(filename))
-                    {
-                        Texture2D texture = new Texture2D(2, 2);
-                        texture.LoadImage(imageData);
-                        texture.Apply();
-
-                        LoadIntoImage(texture);
-                    }
-
-                    // Read the generation info back (only seed should have changed, as the generation picked a particular seed)
-                    if (!string.IsNullOrEmpty(jsonResponse.info))
-                    {
-                        SDParamsOutTxt2Img info = JsonConvert.DeserializeObject<SDParamsOutTxt2Img>(jsonResponse.info);
-
-                        // Read the seed that was used by Stable Diffusion to generate this result
-                        generatedSeed = info.seed;
-                    }
-                }
-                catch (Exception e)
-                {
-                    Debug.LogError(e.Message + "\n\n" + e.StackTrace);
+                    // Read the seed that was used by Stable Diffusion to generate this result
+                    generatedSeed = info.seed;
                 }
             }
-        }
-        catch (Exception e)
-        {
-            Debug.LogError(e.Message + "\n\n" + e.StackTrace);
-        }
+            catch (Exception e)
+            {
+                Debug.LogError(e.Message + "\n\n" + e.StackTrace);
+            }
 
         generating = false;
     }
@@ -397,7 +393,7 @@ public class StableDiffusionText2Image : StableDiffusionGenerator
             // Convert the Texture2D to a Sprite
             Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
 
-            if (promptTheme == PromptTheme.Background)
+            if (GetComponent<Image>() != null)
             {
                 Image image = GetComponent<Image>();
 
@@ -405,23 +401,16 @@ public class StableDiffusionText2Image : StableDiffusionGenerator
                 {
                     image.sprite = sprite;
                 }
-                else
-                {
-                    Debug.LogWarning("SpriteRenderer component not found on the GameObject.");
-                }
             }
-            else
+            else if (GetComponent<SpriteRenderer>() != null)
             {
                 SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
 
-                if (spriteRenderer != null)
-                {
-                    spriteRenderer.sprite = sprite;
-                }
-                else
-                {
-                    Debug.LogWarning("SpriteRenderer component not found on the GameObject.");
-                }
+                spriteRenderer.sprite = sprite;
+            }
+            else
+            {
+                Debug.LogWarning("Image or SpriteRenderer component not found on the GameObject.");
             }
         }
         catch (Exception e)

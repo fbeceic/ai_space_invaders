@@ -1,4 +1,5 @@
-﻿using Txt2Img.Util;
+﻿using System.Threading.Tasks;
+using Txt2Img.Util;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,20 +9,52 @@ namespace Txt2Img.ThemedTxt2Img
     {
         [SerializeField] public PromptTheme promptTheme;
 
-        private Text promptText;
-
-        private Image promptImage;
+        public GameObject promptTextGameObject;
         
-        private void Start()
+        public GameObject promptImageGameObject;
+        
+        public GameObject loadingSpinner;
+
+        private string promptText = "camel";
+
+        public void ApplyPromptFeatures(string text, Sprite sprite)
         {
-            promptText = GetComponentInChildren<Text>();
-            promptImage = GetComponentInChildren<Image>();
+            promptImageGameObject.gameObject.GetComponent<Image>().sprite = sprite;
+            promptTextGameObject.gameObject.GetComponent<Text>().text = text + "\n" + "(" + promptTheme + ")";
+            promptText = text;
+        }
+        
+        public void RepromptResult()
+        {
+            var diffusionGenerator = promptImageGameObject.gameObject.GetComponent<StableDiffusionText2Image>();    
+            diffusionGenerator.PromptTheme = promptTheme;
+            diffusionGenerator.Prompt = ThemedTxt2Img.ExtendPrompt(promptText, promptTheme, PromptType.Main);
+            diffusionGenerator.NegativePrompt = ThemedTxt2Img.ExtendPrompt("", promptTheme, PromptType.Negative);
+
+            if (!diffusionGenerator.generating)
+            {
+                StartCoroutine(diffusionGenerator.GenerateAsync(ShowLoading));
+            }
+
+            // Wait for the generation to complete
+            while (diffusionGenerator.generating)
+            {
+                if (!loadingSpinner.activeSelf)
+                {
+                    loadingSpinner.SetActive(true);
+                }
+                // You can add progress indication here if needed
+            }
+            
+            loadingSpinner.SetActive(false);
         }
 
-        public void ApplyPromptFeatures()
+        private void ShowLoading(int percentage)
         {
-            
-            
+            if (!loadingSpinner.activeSelf)
+            {
+                loadingSpinner.SetActive(true);
+            }
         }
     }
 }
