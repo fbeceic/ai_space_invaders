@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: -4447578080803963419}
   - component: {fileID: 1551307908973724939}
   - component: {fileID: 1671377812915453433}
+  - component: {fileID: 219563848041951101}
   m_Layer: 9
   m_Name: Invader_Base
   m_TagString: Untagged
@@ -75,7 +76,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -126,8 +127,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf6c5bdb995ddd44a2ffaf3ee961b87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animationSprites: []
-  animationTime: 1
   score: 10
 --- !u!60 &1671377812915453433
 PolygonCollider2D:
@@ -179,3 +178,16 @@ PolygonCollider2D:
       - {x: 0.58778536, y: -0.80901694}
       - {x: 0.9510565, y: 0.30901712}
   m_UseDelaunayMesh: 0
+--- !u!114 &219563848041951101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8922502034929116581}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad6724fce58560d43918d952ac33463b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  promptTheme: 2

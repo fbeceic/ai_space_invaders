@@ -395,7 +395,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 404323815}
+      - m_Target: {fileID: 642583736}
         m_TargetAssemblyTypeName: Txt2Img.ThemedTxt2Img.ThemedTxt2Img, Assembly-CSharp
         m_MethodName: StartTxt2ImgGeneration
         m_Mode: 1
@@ -546,7 +546,7 @@ MonoBehaviour:
   fitType: 0
   rows: 2
   columns: 2
-  cellSize: {x: 498, y: 247}
+  cellSize: {x: 449, y: 247}
   spacing: {x: 12, y: 12}
   fitX: 1
   fitY: 1
@@ -751,10 +751,8 @@ GameObject:
   m_Component:
   - component: {fileID: 404323812}
   - component: {fileID: 404323813}
-  - component: {fileID: 404323814}
-  - component: {fileID: 404323815}
   m_Layer: 0
-  m_Name: AIManager
+  m_Name: MenuManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -790,63 +788,6 @@ MonoBehaviour:
   menus:
   - {fileID: 1363860135}
   - {fileID: 1608193970}
---- !u!114 &404323814
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 404323809}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c93d797f0c71fa4ebd6ac191e533b14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  settings: {fileID: 11400000, guid: 2f0a42d2a132f7144b35b4cabb576d34, type: 2}
-  samplers:
-  - Euler a
-  - Euler
-  - LMS
-  - Heun
-  - DPM2
-  - DPM2 a
-  - DPM++ 2S a
-  - DPM++ 2M
-  - DPM++ SDE
-  - DPM fast
-  - DPM adaptive
-  - LMS Karras
-  - DPM2 Karras
-  - DPM2 a Karras
-  - DPM++ 2S a Karras
-  - DPM++ 2M Karras
-  - DPM++ SDE Karras
-  - DDIM
-  - PLMS
-  modelNames:
-  - realisticVisionV51_v51VAE
---- !u!114 &404323815
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 404323809}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 322f9046b90a7fa48aa1824c2f3e0843, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  diffusionGenerators:
-  - {fileID: 911694066}
-  - {fileID: 1250272628}
-  - {fileID: 1490796992}
-  - {fileID: 2015454089}
-  inputFields:
-  - {fileID: 458328279}
-  - {fileID: 3373997}
-  - {fileID: 465856568}
-  - {fileID: 738686123}
 --- !u!1 &458328277
 GameObject:
   m_ObjectHideFlags: 0
@@ -1736,7 +1677,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 308615111916159035, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
       propertyPath: m_Name
-      value: PromptResult (3)
+      value: PromptResult_Projectile
       objectReference: {fileID: 0}
     - target: {fileID: 2585145102831990247, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
       propertyPath: m_AnchorMax.x
@@ -1770,6 +1711,12 @@ PrefabInstance:
       propertyPath: promptImageGameObject
       value: 
       objectReference: {fileID: 2015454087}
+    - target: {fileID: 4311107620237403660, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
+      propertyPath: m_Text
+      value: 'Prompt
+
+        (PROJECTILE)'
+      objectReference: {fileID: 0}
     - target: {fileID: 4524133240179786009, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1850,6 +1797,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8495208138762165873, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: eeda8c0973e7f7748bc4dfe56772a45b, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1865,6 +1816,125 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2336248061715851375, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
   m_PrefabInstance: {fileID: 624562392}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &642583734
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 642583739}
+  - component: {fileID: 642583738}
+  - component: {fileID: 642583737}
+  - component: {fileID: 642583736}
+  - component: {fileID: 642583735}
+  m_Layer: 0
+  m_Name: AIManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &642583735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 642583734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ad2df9bc3554e9686a0ae170137c2bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &642583736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 642583734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 322f9046b90a7fa48aa1824c2f3e0843, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  diffusionGenerators:
+  - {fileID: 911694066}
+  - {fileID: 1250272628}
+  - {fileID: 1490796992}
+  - {fileID: 2015454089}
+  inputFields:
+  - {fileID: 458328279}
+  - {fileID: 3373997}
+  - {fileID: 465856568}
+  - {fileID: 738686123}
+--- !u!114 &642583737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 642583734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c93d797f0c71fa4ebd6ac191e533b14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  settings: {fileID: 11400000, guid: 2f0a42d2a132f7144b35b4cabb576d34, type: 2}
+  samplers:
+  - Euler a
+  - Euler
+  - LMS
+  - Heun
+  - DPM2
+  - DPM2 a
+  - DPM++ 2S a
+  - DPM++ 2M
+  - DPM++ SDE
+  - DPM fast
+  - DPM adaptive
+  - LMS Karras
+  - DPM2 Karras
+  - DPM2 a Karras
+  - DPM++ 2S a Karras
+  - DPM++ 2M Karras
+  - DPM++ SDE Karras
+  - DDIM
+  - PLMS
+  modelNames:
+  - realisticVisionV51_v51VAE
+--- !u!114 &642583738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 642583734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42cfe03b79c5443cb470727e5c3fa3c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  menus:
+  - {fileID: 1363860135}
+  - {fileID: 1608193970}
+--- !u!4 &642583739
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 642583734}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &649148427
 GameObject:
   m_ObjectHideFlags: 0
@@ -3489,7 +3559,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 308615111916159035, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
       propertyPath: m_Name
-      value: PromptResult (2)
+      value: PromptResult_Enemy
       objectReference: {fileID: 0}
     - target: {fileID: 2585145102831990247, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
       propertyPath: m_AnchorMax.x
@@ -3523,6 +3593,12 @@ PrefabInstance:
       propertyPath: promptImageGameObject
       value: 
       objectReference: {fileID: 1490796990}
+    - target: {fileID: 4311107620237403660, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
+      propertyPath: m_Text
+      value: 'Prompt
+
+        (ENEMY)'
+      objectReference: {fileID: 0}
     - target: {fileID: 4524133240179786009, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -3603,6 +3679,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8495208138762165873, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 8759936b08ac1ad4289eb0dcd562d734, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3896,7 +3976,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 308615111916159035, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
       propertyPath: m_Name
-      value: PromptResult (1)
+      value: PromptResult_Player
       objectReference: {fileID: 0}
     - target: {fileID: 2585145102831990247, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
       propertyPath: m_AnchorMax.x
@@ -3930,6 +4010,12 @@ PrefabInstance:
       propertyPath: promptImageGameObject
       value: 
       objectReference: {fileID: 1250272626}
+    - target: {fileID: 4311107620237403660, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
+      propertyPath: m_Text
+      value: 'Prompt
+
+        (PLAYER)'
+      objectReference: {fileID: 0}
     - target: {fileID: 4524133240179786009, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -4010,6 +4096,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8495208138762165873, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 5556711be233a9046b91e0b210b3b65a, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4198,7 +4288,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 308615111916159035, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
       propertyPath: m_Name
-      value: PromptResult
+      value: PromptResult_Background
       objectReference: {fileID: 0}
     - target: {fileID: 2585145102831990247, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
       propertyPath: m_AnchorMax.x
@@ -4212,10 +4302,12 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4015543523934876122, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
-      propertyPath: loadingSpinner
-      value: 
-      objectReference: {fileID: 5105907682850205273}
+    - target: {fileID: 4311107620237403660, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
+      propertyPath: m_Text
+      value: 'Prompt
+
+        (BACKGROUND)'
+      objectReference: {fileID: 0}
     - target: {fileID: 4524133240179786009, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -4296,16 +4388,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8495208138762165873, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: bbc2390da175f2542a4e95ec1f501fa0, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
---- !u!1 &5105907682850205273 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2336248061715851375, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
-  m_PrefabInstance: {fileID: 5105907682850205272}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -4313,3 +4404,4 @@ SceneRoots:
   - {fileID: 2089399863}
   - {fileID: 1294819301}
   - {fileID: 404323812}
+  - {fileID: 642583739}

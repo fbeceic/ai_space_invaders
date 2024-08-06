@@ -1,6 +1,7 @@
 using System.Linq;
 using Txt2Img;
 using Txt2Img.ThemedTxt2Img;
+using Txt2Img.Util;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,7 +31,6 @@ public class Invaders : MonoBehaviour
 
     private void CreateInvaderGrid()
     {
-        var diffusionGenerators = FindObjectsOfType<StableDiffusionText2Image>().ToList();
         for (int i = 0; i < rows; i++)
         {
             float width = 2f * (columns - 1);
@@ -44,14 +44,7 @@ public class Invaders : MonoBehaviour
                 var prefabToInstantiate = prefabs[i];
 
                 Invader invader = Instantiate(prefabToInstantiate, transform);
-                var objectToModify =
-                    invader.gameObject.GetComponent<PromptThemedObject>();
-                var matchingPrompt = diffusionGenerators.Find(input => input.PromptTheme == objectToModify.promptTheme);
-                var generatedSprite = matchingPrompt.gameObject.GetComponent<Image>().sprite;
-                invader.gameObject.GetComponent<SpriteRenderer>().sprite = generatedSprite;
-
-                invader.ApplyGeneratedSprite(generatedSprite);
-
+                
                 // Calculate and set the position of the invader in the row
                 Vector3 position = rowPosition;
                 position.x += 2f * j;

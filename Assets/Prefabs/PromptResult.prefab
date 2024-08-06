@@ -228,6 +228,7 @@ MonoBehaviour:
   promptTheme: 0
   promptTextGameObject: {fileID: 308824828138029879}
   promptImageGameObject: {fileID: 5018769138176411629}
+  loadingSpinner: {fileID: 2336248061715851375}
 --- !u!1 &308824828138029879
 GameObject:
   m_ObjectHideFlags: 0
@@ -697,5 +698,10 @@ PrefabInstance:
 --- !u!224 &2336248061695681231 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 22400024, guid: 4396a831358f4fe49bb64502f4535264, type: 3}
+  m_PrefabInstance: {fileID: 2336248061715885783}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2336248061715851375 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100024, guid: 4396a831358f4fe49bb64502f4535264, type: 3}
   m_PrefabInstance: {fileID: 2336248061715885783}
   m_PrefabAsset: {fileID: 0}

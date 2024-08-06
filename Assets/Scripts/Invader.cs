@@ -6,8 +6,6 @@ using UnityEngine;
 [RequireComponent(typeof(PolygonCollider2D))]
 public class Invader : MonoBehaviour
 {
-    public Sprite[] animationSprites = new Sprite[0];
-    public float animationTime = 1f;
     public int score = 10;
 
     private SpriteRenderer spriteRenderer;
@@ -16,24 +14,7 @@ public class Invader : MonoBehaviour
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteRenderer.sprite = animationSprites[0];
-    }
-
-    private void Start()
-    {
-        InvokeRepeating(nameof(AnimateSprite), animationTime, animationTime);
-    }
-
-    private void AnimateSprite()
-    {
-        animationFrame++;
-
-        // Loop back to the start if the animation frame exceeds the length
-        if (animationFrame >= animationSprites.Length) {
-            animationFrame = 0;
-        }
-
-        spriteRenderer.sprite = animationSprites[animationFrame];
+        transform.localScale = new Vector3 {x = 0.5f, y = 0.5f, z = 0.5f};
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -44,10 +25,4 @@ public class Invader : MonoBehaviour
             GameManager.Instance.OnBoundaryReached();
         }
     }
-
-    public void ApplyGeneratedSprite(Sprite sprite)
-    {
-        animationSprites = new[] { sprite };
-    }
-
 }

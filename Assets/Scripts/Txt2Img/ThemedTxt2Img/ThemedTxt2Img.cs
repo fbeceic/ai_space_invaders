@@ -14,16 +14,13 @@ namespace Txt2Img.ThemedTxt2Img
 
         public List<TMP_InputField> inputFields;
 
-        public List<Prompt> inputPrompts;
-
-        public static ThemedTxt2Img Instance;
+        [SerializeField]
+        private List<Prompt> inputPrompts;
 
         private void Awake()
         {
-            Instance = this;
             diffusionGenerators = Resources.FindObjectsOfTypeAll<StableDiffusionText2Image>()
                 .Where(instance => instance.gameObject.scene.IsValid()).ToList();
-            DontDestroyOnLoad(gameObject);
         }
 
         public void StartTxt2ImgGeneration()
@@ -78,14 +75,14 @@ namespace Txt2Img.ThemedTxt2Img
             }
 
             MenuManager.Instance.ShowMenu(1);
-            EnableObjectsAndAssignTextures(inputPrompts);
+            EnableObjectsAndAssignTextures();
         }
 
         public static string ExtendPrompt(string prompt, PromptTheme theme, PromptType type)
             => (type == PromptType.Main ? prompt : "") + ", " +
                string.Join(", ", PromptExtensions.Extensions.GetValue(theme).GetValue(type));
 
-        private static void EnableObjectsAndAssignTextures(List<Prompt> inputPrompts)
+        private void EnableObjectsAndAssignTextures()
         {
             var promptResults = FindObjectsOfType<PromptResult>().ToList();
 
@@ -93,11 +90,6 @@ namespace Txt2Img.ThemedTxt2Img
             {
                 var matchingPrompt = inputPrompts.Find(input => input.Theme == promptResult.promptTheme);
                 promptResult.ApplyPromptFeatures(matchingPrompt.Text, matchingPrompt.Result);
-
-                if (promptResult.gameObject.GetComponent<Invader>() != null)
-                {
-                    promptResult.gameObject.GetComponent<Invader>().ApplyGeneratedSprite(matchingPrompt.Result);
-                }
             }
         }
     }

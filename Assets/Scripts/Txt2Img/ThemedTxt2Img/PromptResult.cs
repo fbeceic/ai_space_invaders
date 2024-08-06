@@ -1,18 +1,19 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Txt2Img.Util;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Txt2Img.ThemedTxt2Img
-{ 
-    public class PromptResult: MonoBehaviour
+{
+    public class PromptResult : MonoBehaviour
     {
         [SerializeField] public PromptTheme promptTheme;
 
         public GameObject promptTextGameObject;
-        
+
         public GameObject promptImageGameObject;
-        
+
         public GameObject loadingSpinner;
 
         private string promptText = "camel";
@@ -23,10 +24,15 @@ namespace Txt2Img.ThemedTxt2Img
             promptTextGameObject.gameObject.GetComponent<Text>().text = text + "\n" + "(" + promptTheme + ")";
             promptText = text;
         }
-        
+
+        private void Start()
+        {
+            SaveSpriteToAIManager();
+        }
+
         public void RepromptResult()
         {
-            var diffusionGenerator = promptImageGameObject.gameObject.GetComponent<StableDiffusionText2Image>();    
+            var diffusionGenerator = promptImageGameObject.gameObject.GetComponent<StableDiffusionText2Image>();
             diffusionGenerator.PromptTheme = promptTheme;
             diffusionGenerator.Prompt = ThemedTxt2Img.ExtendPrompt(promptText, promptTheme, PromptType.Main);
             diffusionGenerator.NegativePrompt = ThemedTxt2Img.ExtendPrompt("", promptTheme, PromptType.Negative);
@@ -45,7 +51,9 @@ namespace Txt2Img.ThemedTxt2Img
                 }
                 // You can add progress indication here if needed
             }
-            
+
+            SaveSpriteToAIManager();
+
             loadingSpinner.SetActive(false);
         }
 
@@ -55,6 +63,15 @@ namespace Txt2Img.ThemedTxt2Img
             {
                 loadingSpinner.SetActive(true);
             }
+        }
+
+        private void SaveSpriteToAIManager()
+        {
+            var aiManager = GameObject.Find("AIManager").GetComponent<AIManager>();
+            var result = promptImageGameObject.gameObject.GetComponent<Image>().sprite;
+
+            aiManager.PromptResults[promptTheme] =
+                new Prompt { Theme = promptTheme, Text = promptText, Result = result };
         }
     }
 }
