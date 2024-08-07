@@ -10,6 +10,15 @@ namespace Txt2Img
         
         private void Start()
         {
+            ApplyPromptResult();
+            if (promptTheme != PromptTheme.Background)
+            {
+                ReinitializeCollider();
+            }
+        }
+
+        private void ApplyPromptResult()
+        {
             var generatedSprite = PromptHelper.GetPromptResult(promptTheme);
 
             var spriteRenderer = GetComponent<SpriteRenderer>();
@@ -23,5 +32,18 @@ namespace Txt2Img
             }
         }
 
+        private void ReinitializeCollider()
+        {
+            var currentPolygonCollider = GetComponent<PolygonCollider2D>();
+            if (currentPolygonCollider == null)
+            {
+                return;
+            }
+            
+            Destroy(currentPolygonCollider);
+            
+            var newPolygonCollider = gameObject.AddComponent<PolygonCollider2D>();
+            newPolygonCollider.isTrigger = true;
+        }
     }
 }

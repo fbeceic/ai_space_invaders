@@ -28,7 +28,7 @@ public class OffsetObject : MonoBehaviour
 
     void ApplyBackgroundOffset()
     {
-        Vector3 offsetPosition = new Vector3(500, 345, 0);
+        Vector3 offsetPosition = new Vector3(-23.5f, -23.5f, 0);
         rectTransform.localPosition += offsetPosition;
     }
 }

@@ -17,7 +17,7 @@ public sealed class MenuManager : MonoBehaviour
 
     void Start()
     {
-        ShowMenu(0); 
+        //ShowMenu(0); 
     }
     
     public void ShowMenu(int index)

@@ -1,17 +1,17 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent(typeof(BoxCollider2D))]
+[RequireComponent(typeof(PolygonCollider2D))]
 public class Projectile : MonoBehaviour
 {
     public Vector3 direction = Vector3.up;
     public float speed = 20f;
 
-    private new BoxCollider2D collider;
+    private new PolygonCollider2D collider;
 
     private void Awake()
     {
-        collider = GetComponent<BoxCollider2D>();
+        collider = GetComponent<PolygonCollider2D>();
         transform.localScale = new Vector3 {x = 0.2f, y = 0.2f, z = 0.2f};
     }
 

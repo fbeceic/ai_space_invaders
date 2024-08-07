@@ -34,8 +34,8 @@ namespace Txt2Img.ThemedTxt2Img
         {
             var diffusionGenerator = promptImageGameObject.gameObject.GetComponent<StableDiffusionText2Image>();
             diffusionGenerator.PromptTheme = promptTheme;
-            diffusionGenerator.Prompt = ThemedTxt2Img.ExtendPrompt(promptText, promptTheme, PromptType.Main);
-            diffusionGenerator.NegativePrompt = ThemedTxt2Img.ExtendPrompt("", promptTheme, PromptType.Negative);
+            diffusionGenerator.Prompt = PromptHelper.ExtendPrompt(promptText, promptTheme, PromptType.Main);
+            diffusionGenerator.NegativePrompt = PromptHelper.ExtendPrompt("", promptTheme, PromptType.Negative);
 
             if (!diffusionGenerator.generating)
             {

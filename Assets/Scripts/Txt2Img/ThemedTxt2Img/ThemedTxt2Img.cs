@@ -27,7 +27,7 @@ namespace Txt2Img.ThemedTxt2Img
         {
             inputFields.Sort((x, y) => string.Compare(x.name, y.name, StringComparison.OrdinalIgnoreCase));
             SetInputPrompts();
-            RunPrompts();
+            RunInputPrompts();
         }
 
         public void SetInputPrompts()
@@ -42,15 +42,15 @@ namespace Txt2Img.ThemedTxt2Img
             inputPrompts = prompts;
         }
 
-        public void RunPrompts()
+        public void RunInputPrompts()
         {
             foreach (var diffusionGenerator in diffusionGenerators)
             {
                 var matchingPrompt = inputPrompts.Find(input => input.Theme == diffusionGenerator.PromptTheme);
 
                 diffusionGenerator.PromptTheme = matchingPrompt.Theme;
-                diffusionGenerator.Prompt = ExtendPrompt(matchingPrompt.Text, matchingPrompt.Theme, PromptType.Main);
-                diffusionGenerator.NegativePrompt = ExtendPrompt("", matchingPrompt.Theme, PromptType.Negative);
+                diffusionGenerator.Prompt = PromptHelper.ExtendPrompt(matchingPrompt.Text, matchingPrompt.Theme, PromptType.Main);
+                diffusionGenerator.NegativePrompt = PromptHelper.ExtendPrompt("", matchingPrompt.Theme, PromptType.Negative);
                 diffusionGenerator.GuidField = Guid.NewGuid().ToString();
 
                 if (!diffusionGenerator.generating)
@@ -77,11 +77,7 @@ namespace Txt2Img.ThemedTxt2Img
             MenuManager.Instance.ShowMenu(1);
             EnableObjectsAndAssignTextures();
         }
-
-        public static string ExtendPrompt(string prompt, PromptTheme theme, PromptType type)
-            => (type == PromptType.Main ? prompt : "") + ", " +
-               string.Join(", ", PromptExtensions.Extensions.GetValue(theme).GetValue(type));
-
+        
         private void EnableObjectsAndAssignTextures()
         {
             var promptResults = FindObjectsOfType<PromptResult>().ToList();

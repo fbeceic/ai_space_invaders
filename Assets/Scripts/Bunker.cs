@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(SpriteRenderer))]
@@ -40,27 +41,34 @@ public class Bunker : MonoBehaviour
         copy.SetPixels32(source.GetPixels32());
         copy.Apply();
 
-        Sprite sprite = Sprite.Create(copy, spriteRenderer.sprite.rect, new Vector2(0.5f, 0.5f), spriteRenderer.sprite.pixelsPerUnit);
+        Sprite sprite = Sprite.Create(copy, spriteRenderer.sprite.rect, new Vector2(0.5f, 0.5f),
+            spriteRenderer.sprite.pixelsPerUnit);
         spriteRenderer.sprite = sprite;
     }
 
-    public bool CheckCollision(BoxCollider2D other, Vector3 hitPoint)
+    public bool CheckCollision(PolygonCollider2D other, Vector3 hitPoint)
     {
-        Vector2 offset = other.size / 2;
+        // Get the bounding box of the PolygonCollider2D
+        Bounds bounds = other.bounds;
+        Vector2 offset = bounds.extents;
 
-        // Check the hit point and each edge of the colliding object to see if
-        // it splats with the bunker for more accurate collision detection
+        // Check the hit point and the vertices of the colliding object
         return Splat(hitPoint) ||
                Splat(hitPoint + (Vector3.down * offset.y)) ||
                Splat(hitPoint + (Vector3.up * offset.y)) ||
                Splat(hitPoint + (Vector3.left * offset.x)) ||
-               Splat(hitPoint + (Vector3.right * offset.x));
+               Splat(hitPoint + (Vector3.right * offset.x)) ||
+               CheckPolygonVertices(other);
     }
+
+    private bool CheckPolygonVertices(PolygonCollider2D other)
+        => other.points.Select(point => other.transform.TransformPoint(point)).Any(Splat);
 
     private bool Splat(Vector3 hitPoint)
     {
         // Only proceed if the point maps to a non-empty pixel
-        if (!CheckPoint(hitPoint, out int px, out int py)) {
+        if (!CheckPoint(hitPoint, out int px, out int py))
+        {
             return false;
         }
 
@@ -118,9 +126,9 @@ public class Bunker : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Invader")) {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Invader"))
+        {
             gameObject.SetActive(false);
         }
     }
-
 }
