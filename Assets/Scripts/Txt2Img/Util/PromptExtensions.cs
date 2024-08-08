@@ -28,7 +28,21 @@ namespace Txt2Img.Util
                 }
             },
             {
-                PromptTheme.Projectile, new Dictionary<PromptType, List<string>>
+                PromptTheme.BossEnemy, new Dictionary<PromptType, List<string>>
+                {
+                    { PromptType.Main, new List<string> {  "enemy", "90 degrees angle", "centered", "monster", "boss", "big"} },
+                    { PromptType.Negative, new List<string> { "words", "text", "letters", "realistic", "photograph", "logo", "watermark", "nudity", "man", "human", "person" } }
+                }
+            },
+            {
+                PromptTheme.PlayerProjectile, new Dictionary<PromptType, List<string>>
+                {
+                    { PromptType.Main, new List<string> {  "orb", "circle", "bullet", "projectile", "centered"  } },
+                    { PromptType.Negative, new List<string> { "background", "words", "text", "letters", "realistic", "photograph", "logo", "watermark", "nudity" } }
+                }
+            },
+            {
+                PromptTheme.EnemyProjectile, new Dictionary<PromptType, List<string>>
                 {
                     { PromptType.Main, new List<string> {  "orb", "circle", "bullet", "projectile", "centered"  } },
                     { PromptType.Negative, new List<string> { "background", "words", "text", "letters", "realistic", "photograph", "logo", "watermark", "nudity" } }

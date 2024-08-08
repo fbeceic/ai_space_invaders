@@ -14,7 +14,6 @@ public class Invader : MonoBehaviour
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        transform.localScale = new Vector3 {x = 0.5f, y = 0.5f, z = 0.5f};
     }
 
     private void OnTriggerEnter2D(Collider2D other)

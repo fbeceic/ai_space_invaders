@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using Txt2Img.Util;
 using UnityEngine;
 
 /// <summary>
@@ -17,8 +18,8 @@ public class SDSettings : ScriptableObject
     public string ProgressAPI = "/sdapi/v1/progress";
     public string OutputFolder = "/streamingAssets";
     public string sampler = "Euler a";
-    public int width = 512;
-    public int height = 512;
+    public int width = Constants.GeneratedSpriteWidth;
+    public int height = Constants.GeneratedSpriteHeight;
     public int steps = 35;
     public float cfgScale = 7;
     public long seed = -1;
@@ -68,8 +69,8 @@ class SDParamsInTxt2Img
     public int n_iter = 1;
     public int steps = 50;
     public float cfg_scale = 7;
-    public int width = 512;
-    public int height = 512;
+    public int width = Constants.GeneratedSpriteWidth;
+    public int height = Constants.GeneratedSpriteHeight;
     public bool restore_faces = false;
     public bool tiling = false;
     public string negative_prompt = "";
@@ -155,8 +156,8 @@ class SDParamsOutTxt2Img
     public int n_iter = 1;
     public int steps = 50;
     public float cfg_scale = 7;
-    public int width = 512;
-    public int height = 512;
+    public int width = Constants.GeneratedSpriteWidth;
+    public int height = Constants.GeneratedSpriteHeight;
     public bool restore_faces = false;
     public bool tiling = false;
     public string negative_prompt = "";

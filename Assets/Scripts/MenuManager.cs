@@ -17,7 +17,7 @@ public sealed class MenuManager : MonoBehaviour
 
     void Start()
     {
-        //ShowMenu(0); 
+        ShowMenu(0); 
     }
     
     public void ShowMenu(int index)
@@ -33,6 +33,8 @@ public sealed class MenuManager : MonoBehaviour
         }
     }
 
+    public int CurrentMenu() => menus.FindIndex(menu => menu.activeSelf);
+    
     public void RunGame()
     {
         SceneManager.LoadScene("Space Invaders");

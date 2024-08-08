@@ -47,7 +47,7 @@ public class Invaders : MonoBehaviour
                 
                 // Calculate and set the position of the invader in the row
                 Vector3 position = rowPosition;
-                position.x += 2f * j;
+                position.x += 2.2f * j;
                 invader.transform.localPosition = position;
             }
         }

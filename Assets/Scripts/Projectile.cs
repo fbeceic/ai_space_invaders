@@ -12,7 +12,6 @@ public class Projectile : MonoBehaviour
     private void Awake()
     {
         collider = GetComponent<PolygonCollider2D>();
-        transform.localScale = new Vector3 {x = 0.2f, y = 0.2f, z = 0.2f};
     }
 
     private void Update()

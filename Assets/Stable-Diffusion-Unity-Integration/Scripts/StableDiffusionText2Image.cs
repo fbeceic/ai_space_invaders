@@ -72,8 +72,8 @@ public class StableDiffusionText2Image : StableDiffusionGenerator
     /// </summary>
     [HideInInspector] public int selectedSampler = 0;
 
-    public int width = 512;
-    public int height = 512;
+    public int width = Constants.GeneratedSpriteWidth;
+    public int height = Constants.GeneratedSpriteHeight;
     public int steps = 90;
     public float cfgScale = 7;
     public long seed = -1;
@@ -126,8 +126,8 @@ public class StableDiffusionText2Image : StableDiffusionGenerator
                 }
             }
 
-            width = 512;
-            height = 512;
+            width = Constants.GeneratedSpriteWidth;
+            height = Constants.GeneratedSpriteHeight;
             steps = 50;
             cfgScale = 7;
             seed = -1;
@@ -229,8 +229,8 @@ public class StableDiffusionText2Image : StableDiffusionGenerator
             if (promptTheme == PromptTheme.Background)
             {
                 sd.alwayson_scripts = new Dictionary<string, object>();
-                // sd.width = 1280;
-                // sd.height = 1280;
+                sd.width = Constants.GeneratedBackgroundWidth;
+                sd.height = Constants.GeneratedBackgroundWidth;
             }
 
             string json = JsonConvert.SerializeObject(sd);

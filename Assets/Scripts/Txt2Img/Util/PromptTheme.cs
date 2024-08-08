@@ -5,6 +5,8 @@
         Background,
         Player,
         Enemy,
-        Projectile,
+        BossEnemy,
+        PlayerProjectile,
+        EnemyProjectile,
     }
 }
