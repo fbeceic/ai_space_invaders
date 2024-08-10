@@ -86,6 +86,7 @@ namespace Txt2Img.ThemedTxt2Img
             {
                 var matchingPrompt = inputPrompts.Find(input => input.Theme == promptResult.promptTheme);
                 promptResult.ApplyPromptFeatures(matchingPrompt.Text, matchingPrompt.Result);
+                promptResult.SaveSpriteToAIManager();
             }
         }
     }

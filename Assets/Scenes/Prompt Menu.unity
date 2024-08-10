@@ -457,6 +457,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PromptResult_BossEnemy
       objectReference: {fileID: 0}
+    - target: {fileID: 308615111916159035, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2585145102831990247, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -691,7 +695,7 @@ MonoBehaviour:
   fitType: 0
   rows: 3
   columns: 3
-  cellSize: {x: 314.33334, y: 224}
+  cellSize: {x: 320.33334, y: 224}
   spacing: {x: 12, y: 12}
   fitX: 1
   fitY: 1
@@ -2160,6 +2164,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PromptResult_EnemyProjectile
       objectReference: {fileID: 0}
+    - target: {fileID: 308615111916159035, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2585145102831990247, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -2289,7 +2297,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 642583739}
-  - component: {fileID: 642583738}
   - component: {fileID: 642583737}
   - component: {fileID: 642583736}
   - component: {fileID: 642583735}
@@ -2336,6 +2343,8 @@ MonoBehaviour:
   - {fileID: 3373997}
   - {fileID: 465856568}
   - {fileID: 738686123}
+  - {fileID: 1696260813}
+  - {fileID: 924813959}
 --- !u!114 &642583737
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2371,21 +2380,6 @@ MonoBehaviour:
   - PLMS
   modelNames:
   - realisticVisionV51_v51VAE
---- !u!114 &642583738
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 642583734}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42cfe03b79c5443cb470727e5c3fa3c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  menus:
-  - {fileID: 1363860135}
-  - {fileID: 1608193970}
 --- !u!4 &642583739
 Transform:
   m_ObjectHideFlags: 0
@@ -3902,7 +3896,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1363860136
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4586,6 +4580,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PromptResult_Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 308615111916159035, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2585145102831990247, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -4986,6 +4984,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PromptResult_Player
       objectReference: {fileID: 0}
+    - target: {fileID: 308615111916159035, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2585145102831990247, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -5363,6 +5365,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PromptResult_PlayerProjectile
       objectReference: {fileID: 0}
+    - target: {fileID: 308615111916159035, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2585145102831990247, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -5574,6 +5580,14 @@ PrefabInstance:
     - target: {fileID: 2585145102831990247, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
       propertyPath: m_SizeDelta.x
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2997368089260030910, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
+      propertyPath: width
+      value: 1024
+      objectReference: {fileID: 0}
+    - target: {fileID: 2997368089260030910, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
+      propertyPath: height
+      value: 1024
       objectReference: {fileID: 0}
     - target: {fileID: 4524133240179786009, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
       propertyPath: m_Pivot.x

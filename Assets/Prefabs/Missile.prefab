@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8827057820756593671}
   - component: {fileID: 6161936928069685931}
   - component: {fileID: 2035621840028137008}
+  - component: {fileID: 9121479417331599776}
   m_Layer: 11
   m_Name: Missile
   m_TagString: Untagged
@@ -223,3 +224,16 @@ PolygonCollider2D:
       - {x: 0.1875, y: -0.375}
       - {x: 0.1875, y: 0.375}
   m_UseDelaunayMesh: 0
+--- !u!114 &9121479417331599776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8827057820756593669}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad6724fce58560d43918d952ac33463b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  promptTheme: 5

@@ -21,7 +21,11 @@ namespace Txt2Img.ThemedTxt2Img
         public void ApplyPromptFeatures(string text, Sprite sprite)
         {
             promptImageGameObject.gameObject.GetComponent<Image>().sprite = sprite;
-            promptTextGameObject.gameObject.GetComponent<Text>().text = text + "\n" + "(" + promptTheme + ")";
+            promptTextGameObject.gameObject.GetComponent<Text>().text = text + "\n" + "(" +
+                                                                        promptTheme.ToString()
+                                                                            .Replace(
+                                                                                "(?<!^)(?<!\\s)(?<![a-z])(?=[A-Z])",
+                                                                                " ") + ")";
             promptText = text;
         }
 
@@ -65,7 +69,7 @@ namespace Txt2Img.ThemedTxt2Img
             }
         }
 
-        private void SaveSpriteToAIManager()
+        public void SaveSpriteToAIManager()
         {
             var aiManager = GameObject.Find("AIManager").GetComponent<AIManager>();
             var result = promptImageGameObject.gameObject.GetComponent<Image>().sprite;

@@ -1,6 +1,7 @@
 using System;
 using Txt2Img.Util;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Txt2Img
@@ -11,7 +12,7 @@ namespace Txt2Img
 
         private void Start()
         {
-            if (MenuManager.Instance.CurrentMenu() == 0) return;
+            if (SceneManager.GetActiveScene().name == "Prompt Menu") return;
             
             ApplyPromptResult();
             ApplyScale();
@@ -86,11 +87,11 @@ namespace Txt2Img
             {
                 case PromptTheme.PlayerProjectile:
                 case PromptTheme.EnemyProjectile:
-                    return (0.1f, 0.1f);
+                    return (0.2f, 0.2f);
                 case PromptTheme.Background:
                     return (5.5f, 5.5f);
                 case PromptTheme.Enemy:
-                    return (0.5f, 0.5f);
+                    return (0.7f, 0.7f);
                 case PromptTheme.BossEnemy:
                     return (1.1f, 1.1f);
                 case PromptTheme.Player:

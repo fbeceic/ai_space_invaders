@@ -33,8 +33,6 @@ public sealed class MenuManager : MonoBehaviour
         }
     }
 
-    public int CurrentMenu() => menus.FindIndex(menu => menu.activeSelf);
-    
     public void RunGame()
     {
         SceneManager.LoadScene("Space Invaders");
