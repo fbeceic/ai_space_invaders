@@ -1,10 +1,9 @@
-using System;
 using Txt2Img.Util;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-namespace Txt2Img
+namespace Txt2Img.ThemedTxt2Img
 {
     public class PromptThemedObject : MonoBehaviour
     {

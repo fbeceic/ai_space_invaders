@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace Txt2Img.ThemedTxt2Img
 {
-    public class ThemedTxt2Img : MonoBehaviour, IThemedTxt2Img
+    public class ThemedTxt2Img : MonoBehaviour
     {
         public List<StableDiffusionText2Image> diffusionGenerators;
 
@@ -35,8 +35,8 @@ namespace Txt2Img.ThemedTxt2Img
             List<Prompt> prompts = new();
             foreach (var inputField in inputFields)
             {
-                var fieldTheme = inputField.GetComponent<PromptThemedObject>().promptTheme;
-                prompts.Add(new Prompt { Text = inputField.text, Theme = fieldTheme });
+                var fieldTheme = inputField.GetComponent<PromptThemedInput>().promptTheme;
+                prompts.Add(new() { Text = inputField.text, Theme = fieldTheme });
             }
 
             inputPrompts = prompts;
@@ -44,49 +44,18 @@ namespace Txt2Img.ThemedTxt2Img
 
         public void RunInputPrompts()
         {
+            MenuManager.Instance.ShowMenu(1);
+            var promptResults = FindObjectsOfType<PromptResult>().ToList();
+
             foreach (var diffusionGenerator in diffusionGenerators)
             {
                 var matchingPrompt = inputPrompts.Find(input => input.Theme == diffusionGenerator.PromptTheme);
+                var matchingPromptResult = promptResults.Find(result => result.theme == diffusionGenerator.PromptTheme);
 
-                diffusionGenerator.PromptTheme = matchingPrompt.Theme;
-                diffusionGenerator.Prompt = PromptHelper.ExtendPrompt(matchingPrompt.Text, matchingPrompt.Theme, PromptType.Main);
-                diffusionGenerator.NegativePrompt = PromptHelper.ExtendPrompt("", matchingPrompt.Theme, PromptType.Negative);
-                diffusionGenerator.GuidField = Guid.NewGuid().ToString();
+                PromptHelper.InvokeTxt2ImgGeneration(diffusionGenerator, matchingPrompt.Text, matchingPrompt.Theme);
 
-                if (!diffusionGenerator.generating)
-                {
-                    StartCoroutine(diffusionGenerator.GenerateAsync());
-                }
-
-                // Wait for the generation to complete
-                while (diffusionGenerator.generating)
-                {
-                    // You can add progress indication here if needed
-                }
-
-                if (diffusionGenerator.gameObject.GetComponent<Image>() != null)
-                {
-                    matchingPrompt.Result = diffusionGenerator.gameObject.GetComponent<Image>().sprite;
-                }
-                else if (diffusionGenerator.gameObject.GetComponent<SpriteRenderer>() != null)
-                {
-                    matchingPrompt.Result = diffusionGenerator.gameObject.GetComponent<SpriteRenderer>().sprite;
-                }
-            }
-
-            MenuManager.Instance.ShowMenu(1);
-            EnableObjectsAndAssignTextures();
-        }
-        
-        private void EnableObjectsAndAssignTextures()
-        {
-            var promptResults = FindObjectsOfType<PromptResult>().ToList();
-
-            foreach (var promptResult in promptResults)
-            {
-                var matchingPrompt = inputPrompts.Find(input => input.Theme == promptResult.promptTheme);
-                promptResult.ApplyPromptFeatures(matchingPrompt.Text, matchingPrompt.Result);
-                promptResult.SaveSpriteToAIManager();
+                matchingPromptResult.ApplyPromptFeatures(matchingPrompt.Text, diffusionGenerator.gameObject.GetComponent<Image>().sprite);
+                matchingPromptResult.SaveSpriteToAIManager();
             }
         }
     }

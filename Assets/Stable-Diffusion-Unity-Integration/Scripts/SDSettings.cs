@@ -13,7 +13,6 @@ public class SDSettings : ScriptableObject
     [Header("AUTOMATIC1111 Settings")] public string StableDiffusionServerURL = "http://127.0.0.1:7860";
     public string ModelsAPI = "/sdapi/v1/sd-models";
     public string TextToImageAPI = "/sdapi/v1/txt2img";
-    public string ImageToImageAPI = "/sdapi/v1/img2img";
     public string OptionAPI = "/sdapi/v1/options";
     public string ProgressAPI = "/sdapi/v1/progress";
     public string OutputFolder = "/streamingAssets";
@@ -133,7 +132,6 @@ class SDParamsOutTxt2Img
     // public string layerdiffusion_fg_additional_prompt = "";
     // public string layerdiffusion_bg_additional_prompt = "";
     // public string layerdiffusion_blend_additional_prompt = "";
-
 
     public bool enable_hr = false;
     public float denoising_strength = 0;

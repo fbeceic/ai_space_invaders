@@ -308,7 +308,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3373995}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad6724fce58560d43918d952ac33463b, type: 3}
+  m_Script: {fileID: 11500000, guid: 3197b0a4085d46e48e512c497db842ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   promptTheme: 1
@@ -475,6 +475,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2997368089260030910, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
       propertyPath: promptTheme
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4015543523934876122, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
+      propertyPath: theme
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4015543523934876122, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
@@ -690,12 +694,12 @@ MonoBehaviour:
     m_Left: 16
     m_Right: 16
     m_Top: 12
-    m_Bottom: -224
+    m_Bottom: 0
   m_ChildAlignment: 0
   fitType: 0
   rows: 3
   columns: 3
-  cellSize: {x: 320.33334, y: 224}
+  cellSize: {x: 289.33334, y: 146.44444}
   spacing: {x: 12, y: 12}
   fitX: 1
   fitY: 1
@@ -1303,7 +1307,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 458328277}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad6724fce58560d43918d952ac33463b, type: 3}
+  m_Script: {fileID: 11500000, guid: 3197b0a4085d46e48e512c497db842ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   promptTheme: 0
@@ -1625,10 +1629,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 465856566}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad6724fce58560d43918d952ac33463b, type: 3}
+  m_Script: {fileID: 11500000, guid: 3197b0a4085d46e48e512c497db842ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  promptTheme: 2
+  promptTheme: 0
 --- !u!1 &466337542
 GameObject:
   m_ObjectHideFlags: 0
@@ -2185,6 +2189,10 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4015543523934876122, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
+      propertyPath: theme
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4015543523934876122, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
       propertyPath: promptTheme
       value: 5
       objectReference: {fileID: 0}
@@ -2643,7 +2651,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 738686121}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad6724fce58560d43918d952ac33463b, type: 3}
+  m_Script: {fileID: 11500000, guid: 3197b0a4085d46e48e512c497db842ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   promptTheme: 4
@@ -2997,7 +3005,7 @@ GameObject:
   - component: {fileID: 924813961}
   - component: {fileID: 924813960}
   - component: {fileID: 924813959}
-  - component: {fileID: 924813958}
+  - component: {fileID: 924813962}
   m_Layer: 5
   m_Name: BossEnemyBlank
   m_TagString: Untagged
@@ -3025,19 +3033,6 @@ RectTransform:
   m_AnchoredPosition: {x: -27, y: -112}
   m_SizeDelta: {x: 182.3316, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &924813958
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 924813956}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad6724fce58560d43918d952ac33463b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  promptTheme: 3
 --- !u!114 &924813959
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3174,6 +3169,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 924813956}
   m_CullTransparentMesh: 1
+--- !u!114 &924813962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 924813956}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3197b0a4085d46e48e512c497db842ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  promptTheme: 3
 --- !u!1 &948838740
 GameObject:
   m_ObjectHideFlags: 0
@@ -4257,7 +4265,7 @@ GameObject:
   - component: {fileID: 1696260815}
   - component: {fileID: 1696260814}
   - component: {fileID: 1696260813}
-  - component: {fileID: 1696260812}
+  - component: {fileID: 1696260816}
   m_Layer: 5
   m_Name: EnemyProjectileBlank
   m_TagString: Untagged
@@ -4285,19 +4293,6 @@ RectTransform:
   m_AnchoredPosition: {x: 89, y: -56}
   m_SizeDelta: {x: 182.3316, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1696260812
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1696260810}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad6724fce58560d43918d952ac33463b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  promptTheme: 5
 --- !u!114 &1696260813
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4434,6 +4429,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1696260810}
   m_CullTransparentMesh: 1
+--- !u!114 &1696260816
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1696260810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3197b0a4085d46e48e512c497db842ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  promptTheme: 5
 --- !u!1 &1730623779
 GameObject:
   m_ObjectHideFlags: 0
@@ -4598,6 +4606,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2997368089260030910, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
       propertyPath: promptTheme
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4015543523934876122, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
+      propertyPath: theme
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4015543523934876122, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
@@ -5005,6 +5017,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4015543523934876122, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
+      propertyPath: theme
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4015543523934876122, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
       propertyPath: promptTheme
       value: 1
       objectReference: {fileID: 0}
@@ -5383,6 +5399,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2997368089260030910, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
       propertyPath: promptTheme
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4015543523934876122, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}
+      propertyPath: theme
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4015543523934876122, guid: 50e061661a370b1499d3d677e15b97a5, type: 3}

@@ -9,7 +9,5 @@ namespace Txt2Img.ThemedTxt2Img
         public string Text { get; set; }
         public PromptTheme Theme { get; set; }
         [CanBeNull] public Sprite Result { get; set; }
-        
-        public bool IsExecuted => Result is not null;
     }
 }

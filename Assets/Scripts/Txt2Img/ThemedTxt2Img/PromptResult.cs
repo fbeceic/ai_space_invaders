@@ -1,32 +1,38 @@
-﻿using System;
-using System.Threading.Tasks;
-using Txt2Img.Util;
+﻿using Txt2Img.Util;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Txt2Img.ThemedTxt2Img
 {
     public class PromptResult : MonoBehaviour
     {
-        [SerializeField] public PromptTheme promptTheme;
+        [FormerlySerializedAs("promptTheme")]
+        [SerializeField] public PromptTheme theme;
 
-        public GameObject promptTextGameObject;
+        [FormerlySerializedAs("promptText")]
+        public string text = "camel";
 
-        public GameObject promptImageGameObject;
+        [FormerlySerializedAs("promptTextGameObject")]
+        public GameObject textGameObject;
+
+        [FormerlySerializedAs("promptImageGameObject")]
+        public GameObject imageGameObject;
 
         public GameObject loadingSpinner;
 
-        private string promptText = "camel";
-
-        public void ApplyPromptFeatures(string text, Sprite sprite)
+        public void ApplyPromptFeatures(string promptText, Sprite sprite)
         {
-            promptImageGameObject.gameObject.GetComponent<Image>().sprite = sprite;
-            promptTextGameObject.gameObject.GetComponent<Text>().text = text + "\n" + "(" +
-                                                                        promptTheme.ToString()
-                                                                            .Replace(
-                                                                                "(?<!^)(?<!\\s)(?<![a-z])(?=[A-Z])",
-                                                                                " ") + ")";
-            promptText = text;
+            imageGameObject.gameObject.GetComponent<Image>().sprite = sprite;
+            textGameObject.gameObject.GetComponent<Text>().text = promptText +
+                                                                  "\n" +
+                                                                  "(" +
+                                                                  theme.ToString()
+                                                                      .Replace(
+                                                                          "(?<!^)(?<!\\s)(?<![a-z])(?=[A-Z])",
+                                                                          " ") +
+                                                                  ")";
+            text = promptText;
         }
 
         private void Start()
@@ -36,46 +42,17 @@ namespace Txt2Img.ThemedTxt2Img
 
         public void RepromptResult()
         {
-            var diffusionGenerator = promptImageGameObject.gameObject.GetComponent<StableDiffusionText2Image>();
-            diffusionGenerator.PromptTheme = promptTheme;
-            diffusionGenerator.Prompt = PromptHelper.ExtendPrompt(promptText, promptTheme, PromptType.Main);
-            diffusionGenerator.NegativePrompt = PromptHelper.ExtendPrompt("", promptTheme, PromptType.Negative);
+            var diffusionGenerator = imageGameObject.gameObject.GetComponent<StableDiffusionText2Image>();
 
-            if (!diffusionGenerator.generating)
-            {
-                StartCoroutine(diffusionGenerator.GenerateAsync(ShowLoading));
-            }
-
-            // Wait for the generation to complete
-            while (diffusionGenerator.generating)
-            {
-                if (!loadingSpinner.activeSelf)
-                {
-                    loadingSpinner.SetActive(true);
-                }
-                // You can add progress indication here if needed
-            }
+            PromptHelper.InvokeTxt2ImgGeneration(diffusionGenerator, text, theme);
 
             SaveSpriteToAIManager();
 
             loadingSpinner.SetActive(false);
         }
 
-        private void ShowLoading(int percentage)
-        {
-            if (!loadingSpinner.activeSelf)
-            {
-                loadingSpinner.SetActive(true);
-            }
-        }
-
         public void SaveSpriteToAIManager()
-        {
-            var aiManager = GameObject.Find("AIManager").GetComponent<AIManager>();
-            var result = promptImageGameObject.gameObject.GetComponent<Image>().sprite;
-
-            aiManager.PromptResults[promptTheme] =
-                new Prompt { Theme = promptTheme, Text = promptText, Result = result };
-        }
+            => AIManager.Instance.PromptResults[theme] =
+                new() { Theme = theme, Text = text, Result = imageGameObject.gameObject.GetComponent<Image>().sprite };
     }
 }
