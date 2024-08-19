@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: -4447578080803963419}
   - component: {fileID: 1551307908973724939}
   - component: {fileID: 1671377812915453433}
-  - component: {fileID: 219563848041951101}
+  - component: {fileID: 4442441594749721696}
   m_Layer: 9
   m_Name: Invader_Base
   m_TagString: Untagged
@@ -178,7 +178,7 @@ PolygonCollider2D:
       - {x: 0.58778536, y: -0.80901694}
       - {x: 0.9510565, y: 0.30901712}
   m_UseDelaunayMesh: 0
---- !u!114 &219563848041951101
+--- !u!114 &4442441594749721696
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -187,7 +187,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8922502034929116581}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad6724fce58560d43918d952ac33463b, type: 3}
+  m_Script: {fileID: 11500000, guid: 7f8f534ecef944c39663c2254c548f81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   promptTheme: 2

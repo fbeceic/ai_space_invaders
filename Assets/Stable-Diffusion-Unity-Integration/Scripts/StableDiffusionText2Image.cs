@@ -39,12 +39,6 @@ public class StableDiffusionText2Image : StableDiffusionGenerator
         set => negativePrompt = value;
     }
 
-    public string GuidField
-    {
-        get => guid;
-        set => guid = value;
-    }
-
     public PromptTheme PromptTheme
     {
         get => promptTheme;
@@ -171,9 +165,8 @@ public class StableDiffusionText2Image : StableDiffusionGenerator
     /// </summary>
     void SetupFolders()
     {
-        // Get the configuration settings
         if (sdc == null)
-            sdc = GameObject.FindObjectOfType<StableDiffusionConfiguration>();
+            sdc = FindObjectOfType<StableDiffusionConfiguration>();
 
         try
         {
@@ -249,13 +242,13 @@ public class StableDiffusionText2Image : StableDiffusionGenerator
                     Convert.ToBase64String(Encoding.UTF8.GetBytes(sdc.settings.user + ":" + sdc.settings.pass));
                 request.SetRequestHeader("Authorization", "Basic " + encodedCredentials);
             }
-
-            // Send the request and wait for the response
+            
             request.SendWebRequest();
+
             while (!request.isDone || request.result == UnityWebRequest.Result.InProgress)
             {
-                loadingCallback?.Invoke(1);
-                Debug.Log("Waiting for the request to complete...");
+                loadingCallback?.Invoke((int)(request.downloadProgress * 100));
+                yield return null; 
             }
 
             if (request.result != UnityWebRequest.Result.Success)

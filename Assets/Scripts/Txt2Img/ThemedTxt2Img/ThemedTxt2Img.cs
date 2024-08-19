@@ -14,8 +14,7 @@ namespace Txt2Img.ThemedTxt2Img
 
         public List<TMP_InputField> inputFields;
 
-        [SerializeField]
-        private List<Prompt> inputPrompts;
+        [SerializeField] private List<Prompt> inputPrompts;
 
         private void Awake()
         {
@@ -30,7 +29,7 @@ namespace Txt2Img.ThemedTxt2Img
             RunInputPrompts();
         }
 
-        public void SetInputPrompts()
+        private void SetInputPrompts()
         {
             List<Prompt> prompts = new();
             foreach (var inputField in inputFields)
@@ -42,7 +41,7 @@ namespace Txt2Img.ThemedTxt2Img
             inputPrompts = prompts;
         }
 
-        public void RunInputPrompts()
+        private void RunInputPrompts()
         {
             MenuManager.Instance.ShowMenu(1);
             var promptResults = FindObjectsOfType<PromptResult>().ToList();
@@ -52,9 +51,11 @@ namespace Txt2Img.ThemedTxt2Img
                 var matchingPrompt = inputPrompts.Find(input => input.Theme == diffusionGenerator.PromptTheme);
                 var matchingPromptResult = promptResults.Find(result => result.theme == diffusionGenerator.PromptTheme);
 
-                PromptHelper.InvokeTxt2ImgGeneration(diffusionGenerator, matchingPrompt.Text, matchingPrompt.Theme);
+                PromptHelper.InvokeTxt2ImgGeneration(this, diffusionGenerator, matchingPrompt.Text,
+                    matchingPrompt.Theme, matchingPromptResult.UpdateProgressBar);
 
-                matchingPromptResult.ApplyPromptFeatures(matchingPrompt.Text, diffusionGenerator.gameObject.GetComponent<Image>().sprite);
+                matchingPromptResult.ApplyPromptFeatures(matchingPrompt.Text,
+                    diffusionGenerator.gameObject.GetComponent<Image>().sprite);
                 matchingPromptResult.SaveSpriteToAIManager();
             }
         }

@@ -7,11 +7,10 @@ namespace Txt2Img.ThemedTxt2Img
 {
     public class PromptResult : MonoBehaviour
     {
-        [FormerlySerializedAs("promptTheme")]
-        [SerializeField] public PromptTheme theme;
+        [FormerlySerializedAs("promptTheme")] [SerializeField]
+        public PromptTheme theme;
 
-        [FormerlySerializedAs("promptText")]
-        public string text = "camel";
+        [FormerlySerializedAs("promptText")] public string text = "camel";
 
         [FormerlySerializedAs("promptTextGameObject")]
         public GameObject textGameObject;
@@ -44,7 +43,7 @@ namespace Txt2Img.ThemedTxt2Img
         {
             var diffusionGenerator = imageGameObject.gameObject.GetComponent<StableDiffusionText2Image>();
 
-            PromptHelper.InvokeTxt2ImgGeneration(diffusionGenerator, text, theme);
+            PromptHelper.InvokeTxt2ImgGeneration(this, diffusionGenerator, text, theme, UpdateProgressBar);
 
             SaveSpriteToAIManager();
 
@@ -54,5 +53,10 @@ namespace Txt2Img.ThemedTxt2Img
         public void SaveSpriteToAIManager()
             => AIManager.Instance.PromptResults[theme] =
                 new() { Theme = theme, Text = text, Result = imageGameObject.gameObject.GetComponent<Image>().sprite };
+
+        public void UpdateProgressBar(int progress)
+        {
+            loadingSpinner.SetActive(true);
+        }
     }
 }

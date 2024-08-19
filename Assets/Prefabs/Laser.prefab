@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 33052392596605684}
   - component: {fileID: 33052392596605687}
   - component: {fileID: 33052392596605686}
-  - component: {fileID: -3957456474714491701}
   - component: {fileID: -2950579683656858933}
+  - component: {fileID: 8695175134545008354}
   m_Layer: 10
   m_Name: Laser
   m_TagString: Untagged
@@ -175,19 +175,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   direction: {x: 0, y: 1, z: 0}
   speed: 40
---- !u!114 &-3957456474714491701
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 33052392596605683}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad6724fce58560d43918d952ac33463b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  promptTheme: 4
 --- !u!60 &-2950579683656858933
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -237,3 +224,16 @@ PolygonCollider2D:
       - {x: 0.0625, y: -0.1875}
       - {x: 0.0625, y: 0.1875}
   m_UseDelaunayMesh: 0
+--- !u!114 &8695175134545008354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 33052392596605683}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f8f534ecef944c39663c2254c548f81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  promptTheme: 4

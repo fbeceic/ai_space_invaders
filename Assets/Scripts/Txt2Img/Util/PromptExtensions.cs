@@ -7,21 +7,14 @@ namespace Txt2Img.Util
         public static readonly Dictionary<PromptTheme, Dictionary<PromptType, List<string>>> Extensions = new()
         {
             {
-                PromptTheme.Background, new()
+                PromptTheme.Enemy, new Dictionary<PromptType, List<string>>
                 {
-                    { PromptType.Main, new() { "land", "background" } },
-                    { PromptType.Negative, new() { "words", "text", "letters", "realistic", "photograph", "logo", "watermark", "nudity" } }
-                }
-            },
-            {
-                PromptTheme.Player, new()
-                {
-                    { PromptType.Main, new() { "spaceship", "vertical", "top perspective", "90 degrees angle", "centered" } },
-                    { PromptType.Negative, new() { "words", "text", "letters", "realistic", "photograph", "logo", "watermark", "nudity" } }
+                    { PromptType.Main, new List<string> {  "enemy", "90 degrees angle", "centered", "monster"  } },
+                    { PromptType.Negative, new List<string> { "words", "text", "letters", "realistic", "photograph", "logo", "watermark", "nudity", "man", "human", "person" } }
                 }
             },
         };
-
+ 
         public static List<string> GetValue(this Dictionary<PromptType, List<string>> dictionary, PromptType key)
             => dictionary.TryGetValue(key, out var value) ? value : new();
 

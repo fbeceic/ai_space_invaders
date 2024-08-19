@@ -1,4 +1,4 @@
-using Txt2Img.Util;
+﻿using Txt2Img.Util;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
