@@ -163,33 +163,31 @@ public class StableDiffusionText2Image : StableDiffusionGenerator
     /// <summary>
     /// Setup the output path and filename for image generation
     /// </summary>
-    void SetupFolders()
+    private void SetupFolders()
     {
         if (sdc == null)
             sdc = FindObjectOfType<StableDiffusionConfiguration>();
 
         try
         {
-            // Determine output path
-            string root = Application.dataPath + sdc.settings.OutputFolder;
+            var root = Application.dataPath + sdc.settings.OutputFolder;
             if (root == "" || !Directory.Exists(root))
                 root = Application.streamingAssetsPath;
-            string mat = Path.Combine(root, "SDImages");
+            
+            var mat = Path.Combine(root, "SDImages");
             filename = Path.Combine(mat, $"{promptTheme.ToString().ToLower()}_{prompt.Split(", ")[0]}.png");
 
-            // If folders not already exists, create them
             if (!Directory.Exists(root))
                 Directory.CreateDirectory(root);
             if (!Directory.Exists(mat))
                 Directory.CreateDirectory(mat);
 
-            // If the file already exists, delete it
             if (File.Exists(filename))
                 File.Delete(filename);
         }
         catch (Exception e)
         {
-            Debug.LogError(e.Message + "\n\n" + e.StackTrace);
+            Debug.LogError(string.Join("\n\n", e.Message, e.StackTrace));
         }
     }
 
@@ -210,8 +208,8 @@ public class StableDiffusionText2Image : StableDiffusionGenerator
                 negative_prompt = negativePrompt,
                 steps = steps,
                 cfg_scale = cfgScale,
-                width = width,
-                height = height,
+                width = Constants.GeneratedSpriteWidth,
+                height = Constants.GeneratedSpriteWidth,
                 seed = seed,
                 tiling = false,
                 sampler_name = selectedSampler >= 0 && selectedSampler < samplersList.Length

@@ -1,4 +1,6 @@
-﻿using Txt2Img.Util;
+﻿using System.Collections;
+using System.Collections.Generic;
+using Txt2Img.Util;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -42,12 +44,27 @@ namespace Txt2Img.ThemedTxt2Img
         public void RepromptResult()
         {
             var diffusionGenerator = imageGameObject.gameObject.GetComponent<StableDiffusionText2Image>();
-
+            
+            loadingSpinner.SetActive(true);
+            imageGameObject.SetActive(false);
+            
+            StartCoroutine(ProcessReprompting(diffusionGenerator));
+            
+        }
+        
+        private IEnumerator ProcessReprompting(StableDiffusionText2Image diffusionGenerator)
+        {
             PromptHelper.InvokeTxt2ImgGeneration(this, diffusionGenerator, text, theme, UpdateProgressBar);
+            
+            while (diffusionGenerator.generating)
+            {
+                yield return null;
+            }
 
             SaveSpriteToAIManager();
 
             loadingSpinner.SetActive(false);
+            imageGameObject.SetActive(true);
         }
 
         public void SaveSpriteToAIManager()
