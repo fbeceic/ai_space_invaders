@@ -12,13 +12,18 @@ namespace Txt2Img.ThemedTxt2Img
         private void Start()
         {
             if (SceneManager.GetActiveScene().name == "Prompt Menu") return;
-            
+            ApplyFeatures();
+        }
+
+        public void ApplyFeatures()
+        {
             ApplyPromptResult();
             ApplyScale();
             if (promptTheme != PromptTheme.Background)
             {
                 ReinitializeCollider();
             }
+
         }
 
         private void ApplyPromptResult()
@@ -70,11 +75,14 @@ namespace Txt2Img.ThemedTxt2Img
             {
                 case PromptTheme.Background:
                     return (Constants.GeneratedBackgroundWidth, Constants.GeneratedBackgroundHeight);
+                case PromptTheme.UIButton:
+                    return (Constants.GeneratedUiButtonWidth, Constants.GeneratedUiButtonHeight);
                 case PromptTheme.PlayerProjectile:
                 case PromptTheme.Enemy:
                 case PromptTheme.Player:
                 case PromptTheme.BossEnemy:
                 case PromptTheme.EnemyProjectile:
+                case PromptTheme.UIBackground:
                 default:
                     return (Constants.GeneratedSpriteWidth, Constants.GeneratedSpriteHeight);
             }

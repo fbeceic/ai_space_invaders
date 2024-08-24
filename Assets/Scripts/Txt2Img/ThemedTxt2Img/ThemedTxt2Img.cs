@@ -17,12 +17,6 @@ namespace Txt2Img.ThemedTxt2Img
 
         [SerializeField] private List<Prompt> inputPrompts;
 
-        // private void Awake()
-        // {
-        //     diffusionGenerators = Resources.FindObjectsOfTypeAll<StableDiffusionText2Image>()
-        //         .Where(instance => instance.gameObject.scene.IsValid()).ToList();
-        // }
-
         public void StartTxt2ImgGeneration()
         {
             inputFields.Sort((x, y) => string.Compare(x.name, y.name, StringComparison.OrdinalIgnoreCase));
@@ -33,11 +27,12 @@ namespace Txt2Img.ThemedTxt2Img
         private void SetInputPrompts()
         {
             List<Prompt> prompts = new();
-            foreach (var inputField in inputFields)
+
+            inputFields.ForEach(inputField =>
             {
-                var fieldTheme = inputField.GetComponent<PromptThemedInput>().promptTheme;
-                prompts.Add(new() { Text = inputField.text, Theme = fieldTheme });
-            }
+                var fieldThemes = inputField.GetComponents<PromptThemedInput>().ToList();
+                fieldThemes.ForEach(fieldTheme => { prompts.Add(new() { Text = inputField.text, Theme = fieldTheme.promptTheme }); });
+            });
 
             inputPrompts = prompts;
         }
@@ -45,7 +40,7 @@ namespace Txt2Img.ThemedTxt2Img
         private void RunInputPrompts()
         {
             MenuManager.Instance.ShowMenu(1);
-            var promptResults = FindObjectsOfType<PromptResult>().ToList();
+            var promptResults = AIManager.Instance.promptResultObjects.ToList();
 
             StartCoroutine(ProcessInputPrompts(promptResults));
         }
@@ -53,7 +48,7 @@ namespace Txt2Img.ThemedTxt2Img
         private IEnumerator ProcessInputPrompts(List<PromptResult> promptResults)
         {
             promptResults.ForEach(result => result.imageGameObject.SetActive(false));
-            
+
             foreach (var diffusionGenerator in diffusionGenerators)
             {
                 var matchingPrompt = inputPrompts.Find(input => input.Theme == diffusionGenerator.PromptTheme);
@@ -61,7 +56,7 @@ namespace Txt2Img.ThemedTxt2Img
 
                 matchingPromptResult.imageGameObject.SetActive(false);
                 PromptHelper.InvokeTxt2ImgGeneration(this, diffusionGenerator, matchingPrompt.Text,
-                    matchingPrompt.Theme, matchingPromptResult.UpdateProgressBar);
+                    diffusionGenerator.PromptTheme, matchingPromptResult.UpdateProgressBar);
 
                 while (diffusionGenerator.generating)
                 {
@@ -70,10 +65,17 @@ namespace Txt2Img.ThemedTxt2Img
 
                 matchingPromptResult.loadingSpinner.SetActive(false);
                 matchingPromptResult.imageGameObject.SetActive(true);
-                
-                matchingPromptResult.ApplyPromptFeatures(matchingPrompt.Text,
-                    diffusionGenerator.gameObject.GetComponent<Image>().sprite);
+
+                matchingPromptResult.ApplyPromptLabel(matchingPrompt.Text);
                 matchingPromptResult.SaveSpriteToAIManager();
+                if (matchingPromptResult.theme is PromptTheme.UIBackground)
+                {
+                    matchingPromptResult.ApplyUIBackgrounds();
+                }
+                if (matchingPromptResult.theme is PromptTheme.UIButton)
+                {
+                    matchingPromptResult.ApplyUIButtons();
+                }
             }
         }
     }

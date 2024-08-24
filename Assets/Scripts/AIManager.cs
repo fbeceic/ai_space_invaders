@@ -5,7 +5,9 @@ using UnityEngine;
 
 public sealed class AIManager : MonoBehaviour
 {
-    public Dictionary<PromptTheme, Prompt> PromptResults = new();
+    public List<PromptResult> promptResultObjects;
+    
+    public readonly Dictionary<PromptTheme, Prompt> PromptResults = new();
 
     public static AIManager Instance;
 

@@ -23,7 +23,7 @@ namespace Txt2Img.Util
 
         private static string ExtendPrompt(string prompt, PromptTheme theme, PromptType type)
             => (type == PromptType.Main ? prompt : "") +
-               (type == PromptType.Main ? "," : "") +
+               (type == PromptType.Main ? ", " : "") +
                string.Join(", ", PromptExtensions.Extensions.GetValue(theme).GetValue(type));
 
         public static Sprite GetPromptResult(PromptTheme promptTheme)

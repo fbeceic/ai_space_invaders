@@ -48,6 +48,20 @@ namespace Txt2Img.Util
                     { PromptType.Negative, new() { "background", "words", "text", "letters", "realistic", "photograph", "logo", "watermark", "nudity" } }
                 }
             },
+            {
+                PromptTheme.UIBackground, new()
+                {
+                    { PromptType.Main, new() { "textured", "tiled", "graphics", "material"  } },
+                    { PromptType.Negative, new() {"face", "head", "words", "text", "letters", "logo", "watermark", "nudity" } }
+                }
+            },
+            {
+                PromptTheme.UIButton, new()
+                {
+                    { PromptType.Main, new() {"texture", "material", "2d", "one color", "wallpaper"  } },
+                    { PromptType.Negative, new() {"face", "head", "words", "text", "letters", "logo", "watermark", "nudity", "multiple colors", "objects", "3d" } }
+                }
+            },
         }; 
         public static List<string> GetValue(this Dictionary<PromptType, List<string>> dictionary, PromptType key)
             => dictionary.TryGetValue(key, out var value) ? value : new();
