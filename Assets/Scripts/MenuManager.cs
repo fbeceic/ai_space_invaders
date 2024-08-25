@@ -1,12 +1,12 @@
+using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public sealed class MenuManager : MonoBehaviour
 {
     public List<GameObject> menus;
-    
+
     public static MenuManager Instance;
 
     private void Awake()
@@ -19,7 +19,7 @@ public sealed class MenuManager : MonoBehaviour
     {
         //ShowMenu(0); 
     }
-    
+
     public void ShowMenu(int index)
     {
         foreach (GameObject menu in menus)

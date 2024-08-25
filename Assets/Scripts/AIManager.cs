@@ -7,6 +7,8 @@ public sealed class AIManager : MonoBehaviour
 {
     public List<PromptResult> promptResultObjects;
     
+    public PromptResult EditingPromptResult;
+    
     public readonly Dictionary<PromptTheme, Prompt> PromptResults = new();
 
     public static AIManager Instance;

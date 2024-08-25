@@ -23,16 +23,19 @@ namespace Txt2Img.ThemedTxt2Img
         public GameObject imageGameObject;
 
         public GameObject loadingSpinner;
+        
+        public TabGroup tabGroup;
+        
+        private void Start()
+        {
+            SaveSpriteToAIManager();
+            tabGroup = FindObjectOfType<TabGroup>();
+        }
 
         public void ApplyPromptLabel(string promptText)
         {
             textGameObject.gameObject.GetComponent<TextMeshProUGUI>().text = promptText + "\n" + "(" + theme.ToThemeString() + ")";
             text = promptText;
-        }
-
-        private void Start()
-        {
-            SaveSpriteToAIManager();
         }
 
         public void RepromptResult()
@@ -54,7 +57,7 @@ namespace Txt2Img.ThemedTxt2Img
                 yield return null;
             }
 
-            ApplyPromptLabel("testPrompt");
+            ApplyPromptLabel(text);
             SaveSpriteToAIManager();
 
             if (theme is PromptTheme.UIBackground)
@@ -101,6 +104,17 @@ namespace Txt2Img.ThemedTxt2Img
         public void UpdateProgressBar(int progress)
         {
             loadingSpinner.SetActive(true);
+        }
+
+        public void EnableEditMode()    
+        {
+            AIManager.Instance.EditingPromptResult = this;
+            tabGroup.ToGalleryTab();
+        }
+
+        public void DisableEditMode()
+        {
+            AIManager.Instance.EditingPromptResult = null;
         }
     }
 }

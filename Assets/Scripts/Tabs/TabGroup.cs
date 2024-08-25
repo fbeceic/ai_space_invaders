@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class TabGroup : MonoBehaviour
 {
@@ -9,9 +8,6 @@ public class TabGroup : MonoBehaviour
     public List<TabButton> tabButtons = new List<TabButton>();
     public List<GameObject> tabPages = new List<GameObject>();
 
-    //In case I need to sort the lists by GetSiblingIndex
-    //objListOrder.Sort((x, y) => x.OrderDate.CompareTo(y.OrderDate));
-
     public Color tabIdleColor;
     public Color tabHoverColor;
     public Color tabSelectedColor;
@@ -19,7 +15,6 @@ public class TabGroup : MonoBehaviour
 
     public void Start()
     {
-        // Select first tab
         foreach (TabButton tabButton in tabButtons)
         {
             if (tabButton.transform.GetSiblingIndex() == 0)
@@ -30,7 +25,6 @@ public class TabGroup : MonoBehaviour
     public void Subscribe(TabButton tabButton)
     {
         tabButtons.Add(tabButton);
-        // Sort by order in hierarchy
         tabButtons.Sort((x, y) => x.transform.GetSiblingIndex().CompareTo(y.transform.GetSiblingIndex()));
     }
 
@@ -95,5 +89,29 @@ public class TabGroup : MonoBehaviour
         int currentIndex = selectedTab.transform.GetSiblingIndex();
         int previousIndex = currentIndex > 0 ? currentIndex - 1 : 0;
         OnTabSelected(tabButtons[previousIndex]);
+    }
+
+    public void ToGameElementsTab()
+    {
+        if (tabButtons.Count >= 0)
+        {
+            OnTabSelected(tabButtons[0]); 
+        }
+        else
+        {
+            Debug.LogWarning("There are not enough tabs to switch to the third one.");
+        }
+    }
+
+    public void ToGalleryTab()
+    {
+        if (tabButtons.Count >= 3)
+        {
+            OnTabSelected(tabButtons[2]); 
+        }
+        else
+        {
+            Debug.LogWarning("There are not enough tabs to switch to the third one.");
+        }
     }
 }
