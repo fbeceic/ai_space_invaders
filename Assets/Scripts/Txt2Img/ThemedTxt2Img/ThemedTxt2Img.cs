@@ -54,17 +54,14 @@ namespace Txt2Img.ThemedTxt2Img
                 var matchingPrompt = inputPrompts.Find(input => input.Theme == diffusionGenerator.PromptTheme);
                 var matchingPromptResult = promptResults.Find(result => result.theme == diffusionGenerator.PromptTheme);
 
-                matchingPromptResult.imageGameObject.SetActive(false);
+                //matchingPromptResult.imageGameObject.SetActive(false);
                 PromptHelper.InvokeTxt2ImgGeneration(this, diffusionGenerator, matchingPrompt.Text,
-                    diffusionGenerator.PromptTheme, matchingPromptResult.UpdateProgressBar);
+                    diffusionGenerator.PromptTheme, matchingPromptResult.UpdateGenerationProgress);
 
                 while (diffusionGenerator.generating)
                 {
                     yield return null;
                 }
-
-                matchingPromptResult.loadingSpinner.SetActive(false);
-                matchingPromptResult.imageGameObject.SetActive(true);
 
                 matchingPromptResult.ApplyPromptLabel(matchingPrompt.Text);
                 matchingPromptResult.SaveSpriteToAIManager();

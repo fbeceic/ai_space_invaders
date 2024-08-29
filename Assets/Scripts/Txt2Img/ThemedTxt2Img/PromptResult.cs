@@ -24,7 +24,9 @@ namespace Txt2Img.ThemedTxt2Img
 
         public GameObject loadingSpinner;
         
-        public TabGroup tabGroup;
+        public GameObject downloadPercentage;
+        
+        private TabGroup tabGroup;
         
         private void Start()
         {
@@ -42,15 +44,15 @@ namespace Txt2Img.ThemedTxt2Img
         {
             var diffusionGenerator = imageGameObject.gameObject.GetComponent<StableDiffusionText2Image>();
 
+            downloadPercentage.SetActive(true);
             loadingSpinner.SetActive(true);
-            imageGameObject.SetActive(false);
 
             StartCoroutine(ProcessReprompting(diffusionGenerator));
         }
 
         private IEnumerator ProcessReprompting(StableDiffusionText2Image diffusionGenerator)
         {
-            PromptHelper.InvokeTxt2ImgGeneration(this, diffusionGenerator, text, theme, UpdateProgressBar);
+            PromptHelper.InvokeTxt2ImgGeneration(this, diffusionGenerator, text, theme, UpdateGenerationProgress);
 
             while (diffusionGenerator.generating)
             {
@@ -71,7 +73,7 @@ namespace Txt2Img.ThemedTxt2Img
             }
 
             loadingSpinner.SetActive(false);
-            imageGameObject.SetActive(true);
+            downloadPercentage.SetActive(false);
         }
 
         public void SaveSpriteToAIManager()
@@ -98,12 +100,12 @@ namespace Txt2Img.ThemedTxt2Img
                 .Where(obj => obj.promptTheme == PromptTheme.UIButton)
                 .ToList();
 
-            promptThemedObjects.ForEach(promptThemedObject => { promptThemedObject.ApplyFeatures(); });
+            promptThemedObjects.ForEach(promptThemedObject => promptThemedObject.ApplyFeatures());
         }
 
-        public void UpdateProgressBar(int progress)
+        public void UpdateGenerationProgress(int progress)
         {
-            loadingSpinner.SetActive(true);
+            downloadPercentage.GetComponent<TextMeshProUGUI>().text = progress + "%";
         }
 
         public void EnableEditMode()    

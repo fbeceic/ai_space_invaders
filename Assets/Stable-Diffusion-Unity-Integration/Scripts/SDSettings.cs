@@ -23,7 +23,7 @@ public class SDSettings : ScriptableObject
     public float cfgScale = 7;
     public long seed = -1;
 
-    [Header("API Settings")] public bool useAuth = false;
+    [Header("API Settings")]
     public string user = "";
     public string pass = "";
 

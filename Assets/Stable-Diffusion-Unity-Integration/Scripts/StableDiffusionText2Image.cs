@@ -17,7 +17,7 @@ using UnityEngine.Networking;
 /// Component to help generate a UI Image or RawImage using Stable Diffusion.
 /// </summary>
 [ExecuteAlways]
-public class StableDiffusionText2Image : StableDiffusionGenerator
+public class StableDiffusionText2Image : MonoBehaviour
 {
     [SerializeField] private string guid;
 
@@ -25,6 +25,8 @@ public class StableDiffusionText2Image : StableDiffusionGenerator
     [SerializeField] private string prompt;
     [SerializeField] private string negativePrompt;
     [SerializeField] private PromptTheme promptTheme;
+
+    private static StableDiffusionConfiguration sdc = null;
 
     // Public properties to access and modify the private backing fields
     public string Prompt
@@ -167,13 +169,9 @@ public class StableDiffusionText2Image : StableDiffusionGenerator
     {
         if (sdc == null)
             sdc = FindObjectOfType<StableDiffusionConfiguration>();
-
         try
         {
-            var root = Application.dataPath + sdc.settings.OutputFolder;
-            if (root == "" || !Directory.Exists(root))
-                root = Application.streamingAssetsPath;
-
+            var root = Application.streamingAssetsPath;
             var mat = Path.Combine(root, "SDImages");
             filename = Path.Combine(mat, $"{promptTheme.ToString().ToLower()}_{prompt.Split(", ")[0]}.png");
 
@@ -197,12 +195,9 @@ public class StableDiffusionText2Image : StableDiffusionGenerator
 
         SetupFolders();
 
-        // Set the model parameters
         sdc.SetModelAsync(modelsList[selectedModel]);
 
-        // Generate the image
-        // Create the request body
-        SDParamsInTxt2Img sd = new SDParamsInTxt2Img
+        var sd = new SDParamsInTxt2Img
         {
             prompt = prompt,
             negative_prompt = negativePrompt,
@@ -227,6 +222,7 @@ public class StableDiffusionText2Image : StableDiffusionGenerator
         if (promptTheme is PromptTheme.UIBackground or PromptTheme.UIButton)
         {
             sd.alwayson_scripts = new();
+            sd.tiling = true;
             if (promptTheme is PromptTheme.UIButton)
             {
                 sd.width = Constants.GeneratedUiButtonWidth;
@@ -239,24 +235,19 @@ public class StableDiffusionText2Image : StableDiffusionGenerator
 
         using var request =
             new UnityWebRequest(sdc.settings.StableDiffusionServerURL + sdc.settings.TextToImageAPI, "POST");
+
         request.uploadHandler = new UploadHandlerRaw(bodyRaw);
         request.downloadHandler = new DownloadHandlerBuffer();
         request.SetRequestHeader("Content-Type", "application/json");
-
-        // Add auth-header to request
-        if (sdc.settings.useAuth && !sdc.settings.user.Equals("") && !sdc.settings.pass.Equals(""))
-        {
-            string encodedCredentials =
-                Convert.ToBase64String(Encoding.UTF8.GetBytes(sdc.settings.user + ":" + sdc.settings.pass));
-            request.SetRequestHeader("Authorization", "Basic " + encodedCredentials);
-        }
 
         request.SendWebRequest();
 
         while (!request.isDone || request.result == UnityWebRequest.Result.InProgress)
         {
-            loadingCallback?.Invoke((int)(request.downloadProgress * 100));
-            yield return null;
+            var (imageData, percentage) = GetGenerationData();
+            SaveAndLoadImage(Convert.FromBase64String(imageData ?? ""));
+            loadingCallback?.Invoke((int)(percentage * 100));
+            yield return 1.0f;
         }
 
         if (request.result != UnityWebRequest.Result.Success)
@@ -266,13 +257,10 @@ public class StableDiffusionText2Image : StableDiffusionGenerator
             yield break;
         }
 
-        // Decode the response as a JSON string
         string result = request.downloadHandler.text;
 
-        // Deserialize the JSON string into a data structure
         SDResponseTxt2Img jsonResponse = JsonConvert.DeserializeObject<SDResponseTxt2Img>(result);
 
-        // If no image, there was probably an error so abort
         if (jsonResponse.images == null || jsonResponse.images.Length == 0)
         {
             Debug.LogError(
@@ -281,105 +269,57 @@ public class StableDiffusionText2Image : StableDiffusionGenerator
             yield break;
         }
 
-        var shouldRetrieveTransparentImage = promptTheme is PromptTheme.Background or PromptTheme.UIBackground or PromptTheme.UIButton;
-        // Decode the image from Base64 string into an array of bytes
-        byte[] imageData = Convert.FromBase64String(shouldRetrieveTransparentImage ? jsonResponse.images[0] : jsonResponse.images[1]);
+        if (!string.IsNullOrEmpty(jsonResponse.info))
+        {
+            SDParamsOutTxt2Img info = JsonConvert.DeserializeObject<SDParamsOutTxt2Img>(jsonResponse.info);
 
-        // Write it in the specified project output folder
+            generatedSeed = info.seed;
+        }
+
+        var shouldRetrieveTransparentImage = promptTheme is PromptTheme.Background or PromptTheme.UIBackground or PromptTheme.UIButton;
+        byte[] finalImageData = Convert.FromBase64String(shouldRetrieveTransparentImage ? jsonResponse.images[0] : jsonResponse.images[1]);
+
+        SaveAndLoadImage(finalImageData);
+
+        generating = false;
+    }
+
+    void SaveAndLoadImage(byte[] imageData)
+    {
+        if (imageData.Length <= 0)
+        {
+            return;
+        }
+        
         File.WriteAllBytes(filename, imageData);
 
         try
         {
-            // Read back the image into a texture
             if (File.Exists(filename))
             {
-                Texture2D texture = new Texture2D(2, 2);
+                var texture = new Texture2D(2, 2);
                 texture.LoadImage(imageData);
                 texture.Apply();
 
                 LoadIntoImage(texture);
-            }
-
-            // Read the generation info back (only seed should have changed, as the generation picked a particular seed)
-            if (!string.IsNullOrEmpty(jsonResponse.info))
-            {
-                SDParamsOutTxt2Img info = JsonConvert.DeserializeObject<SDParamsOutTxt2Img>(jsonResponse.info);
-
-                // Read the seed that was used by Stable Diffusion to generate this result
-                generatedSeed = info.seed;
             }
         }
         catch (Exception e)
         {
             Debug.LogError(e.Message + "\n\n" + e.StackTrace);
         }
-
-        generating = false;
     }
 
-    void StartWebRequest()
+    (string imageData, float percentage) GetGenerationData()
     {
-        txt2ImgWebRequest.BeginGetResponse(FinishWebRequest, null);
-    }
+        var url = sdc.settings.StableDiffusionServerURL + sdc.settings.ProgressAPI;
 
-    void FinishWebRequest(IAsyncResult webResult)
-    {
-        var response = txt2ImgWebRequest.EndGetResponse(webResult);
+        using WebClient client = new WebClient();
+        string responseBody = client.DownloadString(url);
 
+        SDProgress sdp = JsonConvert.DeserializeObject<SDProgress>(responseBody);
 
-        using (var streamReader = new StreamReader(response.GetResponseStream()))
-        {
-            // Decode the response as a JSON string
-            string result = streamReader.ReadToEnd();
-
-            // Deserialize the JSON string into a data structure
-            SDResponseTxt2Img json = JsonConvert.DeserializeObject<SDResponseTxt2Img>(result);
-
-            // If no image, there was probably an error so abort
-            if (json.images == null || json.images.Length == 0)
-            {
-                Debug.LogError(
-                    "No image was return by the server. This should not happen. Verify that the server is correctly setup.");
-
-                generating = false;
-                //yield break;
-            }
-
-            // Decode the image from Base64 string into an array of bytes
-            byte[] imageData = Convert.FromBase64String(json.images[1]);
-
-            // Write it in the specified project output folder
-            using (FileStream imageFile = new FileStream(filename, FileMode.Create))
-            {
-                imageFile.WriteAsync(imageData, 0, imageData.Length);
-            }
-
-            try
-            {
-                // Read back the image into a texture
-                if (File.Exists(filename))
-                {
-                    Texture2D texture = new Texture2D(2, 2);
-                    texture.LoadImage(imageData);
-                    texture.Apply();
-
-                    LoadIntoImage(texture);
-                }
-
-                // Read the generation info back (only seed should have changed, as the generation picked a particular seed)
-                if (json.info != "")
-                {
-                    SDParamsOutTxt2Img info = JsonConvert.DeserializeObject<SDParamsOutTxt2Img>(json.info);
-
-                    // Read the seed that was used by Stable Diffusion to generate this result
-                    generatedSeed = info.seed;
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.LogError(e.Message + "\n\n" + e.StackTrace);
-            }
-        }
+        return (sdp.current_image, sdp.progress);
     }
 
     /// <summary>
