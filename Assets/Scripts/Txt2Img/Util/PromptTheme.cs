@@ -1,4 +1,6 @@
-﻿namespace Txt2Img.Util
+﻿using System;
+
+namespace Txt2Img.Util
 {
     public enum PromptTheme
     {
@@ -13,7 +15,7 @@
         UIButton
     }
 
-    public static class PromptThemeToString
+    public static class PromptThemeHelpers
     {
         public static string ToThemeString(this PromptTheme theme)
         {
@@ -28,6 +30,22 @@
                 PromptTheme.UIBackground => "UI Background",
                 PromptTheme.UIButton => "UI Button",
                 _ => theme.ToString()
+            };
+        }
+        
+        public static string ToPromptTheme(this string filenameThemePart)
+        {
+            return filenameThemePart.ToLower() switch
+            {
+                "background" => ToThemeString(PromptTheme.Background),
+                "player" =>  ToThemeString(PromptTheme.Player),
+                "enemy" =>  ToThemeString(PromptTheme.Enemy),
+                "bossenemy" =>  ToThemeString(PromptTheme.BossEnemy),
+                "playerprojectile" =>  ToThemeString(PromptTheme.PlayerProjectile),
+                "enemyprojectile" =>  ToThemeString(PromptTheme.EnemyProjectile),
+                "uibackground" =>  ToThemeString(PromptTheme.UIBackground),
+                "uibutton" =>  ToThemeString(PromptTheme.UIButton),
+                _ => throw new ArgumentException("Invalid theme string", nameof(filenameThemePart))
             };
         }
     }

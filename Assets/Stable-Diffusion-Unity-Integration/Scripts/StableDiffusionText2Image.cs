@@ -284,33 +284,35 @@ public class StableDiffusionText2Image : MonoBehaviour
         generating = false;
     }
 
-    void SaveAndLoadImage(byte[] imageData)
+    private void SaveAndLoadImage(byte[] imageData)
     {
-        if (imageData.Length <= 0)
+        if (imageData.Length == 0)
         {
             return;
         }
         
-        File.WriteAllBytes(filename, imageData);
-
         try
         {
-            if (File.Exists(filename))
-            {
-                var texture = new Texture2D(2, 2);
-                texture.LoadImage(imageData);
-                texture.Apply();
+            File.WriteAllBytes(filename, imageData);
 
-                LoadIntoImage(texture);
+            if (!File.Exists(filename))
+            {
+                return;
             }
+
+            var texture = new Texture2D(2, 2);
+            texture.LoadImage(imageData);
+            texture.Apply();
+
+            LoadIntoImage(texture);
         }
         catch (Exception e)
         {
-            Debug.LogError(e.Message + "\n\n" + e.StackTrace);
+            Debug.LogError(string.Join("\n\n", e.Message, e.StackTrace));
         }
     }
 
-    (string imageData, float percentage) GetGenerationData()
+    private static (string imageData, float percentage) GetGenerationData()
     {
         var url = sdc.settings.StableDiffusionServerURL + sdc.settings.ProgressAPI;
 
@@ -326,7 +328,7 @@ public class StableDiffusionText2Image : MonoBehaviour
     /// Load the texture into an Image or RawImage.
     /// </summary>
     /// <param name="texture">Texture to setup</param>
-    void LoadIntoImage(Texture2D texture)
+    private void LoadIntoImage(Texture2D texture)
     {
         try
         {
@@ -342,20 +344,14 @@ public class StableDiffusionText2Image : MonoBehaviour
                     image.sprite = sprite;
                 }
             }
-            else if (GetComponent<SpriteRenderer>() != null)
-            {
-                SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
-
-                spriteRenderer.sprite = sprite;
-            }
             else
             {
-                Debug.LogWarning("Image or SpriteRenderer component not found on the GameObject.");
+                Debug.LogWarning("Image component not found on the GameObject.");
             }
         }
         catch (Exception e)
         {
-            Debug.LogError(e.Message + "\n\n" + e.StackTrace);
+            Debug.LogError(string.Join("\n\n", e.Message, e.StackTrace));
         }
     }
 }

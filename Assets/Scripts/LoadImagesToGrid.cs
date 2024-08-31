@@ -18,7 +18,10 @@ public class LoadImagesToGrid : MonoBehaviour
         {
             ClearExistingImages();
 
-            var files = Directory.GetFiles(folderPath, "*.png").ToList();
+            var files = Directory.GetFiles(folderPath, "*.png")
+                .OrderByDescending(File.GetLastWriteTime)
+                .ToList();
+            
             var pagedFiles = files.Skip(pageNumber * pageSize).Take(pageSize).ToList();
 
             foreach (var file in pagedFiles)
@@ -31,9 +34,7 @@ public class LoadImagesToGrid : MonoBehaviour
                 var sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
                 var newImage = Instantiate(imagePrefab, flexibleGridLayout.gameObject.transform);
 
-                var fileName = Path.GetFileName(file);
-                newImage.transform.Find("GalleryTextWrapper/Filename").GetComponent<TextMeshProUGUI>().text = fileName;
-                newImage.transform.Find("GalleryImageWrapper/GalleryImage").GetComponent<Image>().sprite = sprite;
+                newImage.GetComponent<GalleryResult>().ApplyResultFeatures(Path.GetFileName(file), sprite);
             }
         }
         else

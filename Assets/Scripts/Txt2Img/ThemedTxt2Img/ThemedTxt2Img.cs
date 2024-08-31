@@ -47,31 +47,23 @@ namespace Txt2Img.ThemedTxt2Img
 
         private IEnumerator ProcessInputPrompts(List<PromptResult> promptResults)
         {
-            promptResults.ForEach(result => result.imageGameObject.SetActive(false));
+            promptResults.ForEach(result =>
+            {
+                var matchingPrompt = inputPrompts.Find(input => input.Theme == result.theme);
+                result.imageGameObject.SetActive(false);
+                result.ApplyPromptLabel(matchingPrompt.Text);
+            });
 
             foreach (var diffusionGenerator in diffusionGenerators)
             {
                 var matchingPrompt = inputPrompts.Find(input => input.Theme == diffusionGenerator.PromptTheme);
                 var matchingPromptResult = promptResults.Find(result => result.theme == diffusionGenerator.PromptTheme);
 
-                //matchingPromptResult.imageGameObject.SetActive(false);
-                PromptHelper.InvokeTxt2ImgGeneration(this, diffusionGenerator, matchingPrompt.Text,
-                    diffusionGenerator.PromptTheme, matchingPromptResult.UpdateGenerationProgress);
+                yield return PromptHelper.InvokeTxt2ImgGeneration(this, diffusionGenerator, matchingPrompt.Text, matchingPromptResult);
 
                 while (diffusionGenerator.generating)
                 {
                     yield return null;
-                }
-
-                matchingPromptResult.ApplyPromptLabel(matchingPrompt.Text);
-                matchingPromptResult.SaveSpriteToAIManager();
-                if (matchingPromptResult.theme is PromptTheme.UIBackground)
-                {
-                    matchingPromptResult.ApplyUIBackgrounds();
-                }
-                if (matchingPromptResult.theme is PromptTheme.UIButton)
-                {
-                    matchingPromptResult.ApplyUIButtons();
                 }
             }
         }

@@ -3,22 +3,48 @@ using System.Collections;
 using System.Collections.Generic;
 using Txt2Img.ThemedTxt2Img;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Txt2Img.Util
 {
     public static class PromptHelper
     {
-        public static void InvokeTxt2ImgGeneration(MonoBehaviour monoBehaviour,
-            StableDiffusionText2Image diffusionGenerator, string prompt, PromptTheme theme, Action<int> loadingCallback)
+        public static IEnumerator InvokeTxt2ImgGeneration(MonoBehaviour monoBehaviour,
+            StableDiffusionText2Image diffusionGenerator, string prompt, PromptResult promptResult)
         {
-            diffusionGenerator.PromptTheme = theme;
-            diffusionGenerator.Prompt = ExtendPrompt(prompt, theme, PromptType.Main);
-            diffusionGenerator.NegativePrompt = ExtendPrompt("", theme, PromptType.Negative);
+            promptResult.imageGameObject.GetComponent<Image>().sprite = null;
+            promptResult.downloadPercentage.SetActive(true);
+            promptResult.loadingSpinner.SetActive(true);
+
+            diffusionGenerator.PromptTheme = promptResult.theme;
+            diffusionGenerator.Prompt = ExtendPrompt(prompt, promptResult.theme, PromptType.Main);
+            diffusionGenerator.NegativePrompt = ExtendPrompt("", promptResult.theme, PromptType.Negative);
 
             if (!diffusionGenerator.generating)
             {
-                monoBehaviour.StartCoroutine(diffusionGenerator.GenerateAsync(loadingCallback));
+                monoBehaviour.StartCoroutine(diffusionGenerator.GenerateAsync(promptResult.UpdateGenerationProgress));
             }
+
+            while (diffusionGenerator.generating)
+            {
+                yield return null;
+            }
+            
+            promptResult.ApplyPromptLabel(prompt);
+            promptResult.SaveSpriteToAIManager();
+
+            if (promptResult.theme is PromptTheme.UIBackground)
+            {
+                promptResult.ApplyUIBackgrounds();
+            }
+
+            if (promptResult.theme is PromptTheme.UIButton)
+            {
+                promptResult.ApplyUIButtons();
+            }
+            
+            promptResult.downloadPercentage.SetActive(false);
+            promptResult.loadingSpinner.SetActive(false);
         }
 
         private static string ExtendPrompt(string prompt, PromptTheme theme, PromptType type)

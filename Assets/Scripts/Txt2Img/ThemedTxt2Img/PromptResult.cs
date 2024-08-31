@@ -25,6 +25,8 @@ namespace Txt2Img.ThemedTxt2Img
         public GameObject loadingSpinner;
         
         public GameObject downloadPercentage;
+
+        private StableDiffusionText2Image diffusionGenerator;
         
         private TabGroup tabGroup;
         
@@ -32,6 +34,7 @@ namespace Txt2Img.ThemedTxt2Img
         {
             SaveSpriteToAIManager();
             tabGroup = FindObjectOfType<TabGroup>();
+            diffusionGenerator = imageGameObject.gameObject.GetComponent<StableDiffusionText2Image>();
         }
 
         public void ApplyPromptLabel(string promptText)
@@ -42,38 +45,18 @@ namespace Txt2Img.ThemedTxt2Img
 
         public void RepromptResult()
         {
-            var diffusionGenerator = imageGameObject.gameObject.GetComponent<StableDiffusionText2Image>();
-
-            downloadPercentage.SetActive(true);
-            loadingSpinner.SetActive(true);
-
-            StartCoroutine(ProcessReprompting(diffusionGenerator));
+            ApplyPromptLabel(text);
+            StartCoroutine(ProcessReprompting());
         }
 
-        private IEnumerator ProcessReprompting(StableDiffusionText2Image diffusionGenerator)
+        private IEnumerator ProcessReprompting()
         {
-            PromptHelper.InvokeTxt2ImgGeneration(this, diffusionGenerator, text, theme, UpdateGenerationProgress);
+            yield return PromptHelper.InvokeTxt2ImgGeneration(this, diffusionGenerator, text, this);
 
             while (diffusionGenerator.generating)
             {
                 yield return null;
             }
-
-            ApplyPromptLabel(text);
-            SaveSpriteToAIManager();
-
-            if (theme is PromptTheme.UIBackground)
-            {
-                ApplyUIBackgrounds();
-            }
-
-            if (theme is PromptTheme.UIButton)
-            {
-                ApplyUIButtons();
-            }
-
-            loadingSpinner.SetActive(false);
-            downloadPercentage.SetActive(false);
         }
 
         public void SaveSpriteToAIManager()
@@ -105,7 +88,16 @@ namespace Txt2Img.ThemedTxt2Img
 
         public void UpdateGenerationProgress(int progress)
         {
+            if (!imageGameObject.activeSelf)
+            {
+                imageGameObject.SetActive(true);
+            }
+
             downloadPercentage.GetComponent<TextMeshProUGUI>().text = progress + "%";
+            if (progress > 99)
+            {
+                downloadPercentage.SetActive(false);
+            }
         }
 
         public void EnableEditMode()    
@@ -117,6 +109,7 @@ namespace Txt2Img.ThemedTxt2Img
         public void DisableEditMode()
         {
             AIManager.Instance.EditingPromptResult = null;
+            SaveSpriteToAIManager();
         }
     }
 }

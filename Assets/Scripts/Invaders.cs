@@ -17,6 +17,8 @@ public class Invaders : MonoBehaviour
     [Header("Grid")]
     public int rows = 5;
     public int columns = 11;
+    public float xSpacing =  4.0f;
+    public float ySpacing = 3.0f;
 
     [Header("Missiles")]
     public Projectile missilePrefab;
@@ -33,21 +35,19 @@ public class Invaders : MonoBehaviour
     {
         for (int i = 0; i < rows; i++)
         {
-            float width = 2f * (columns - 1);
-            float height = 2f * (rows - 1);
+            float width = (xSpacing * (columns - 1));
+            float height = (ySpacing * (rows - 1));
 
             Vector2 centerOffset = new Vector2(-width * 0.5f, -height * 0.5f);
-            Vector3 rowPosition = new Vector3(centerOffset.x, (2f * i) + centerOffset.y, 0f);
+            Vector3 rowPosition = new Vector3(centerOffset.x, (ySpacing * i) + centerOffset.y, 0f);
 
             for (int j = 0; j < columns; j++)
             {
                 var prefabToInstantiate = prefabs[i];
 
                 Invader invader = Instantiate(prefabToInstantiate, transform);
-                
-                // Calculate and set the position of the invader in the row
-                Vector3 position = rowPosition;
-                position.x += 4.0f * j;
+
+                Vector3 position = rowPosition + new Vector3(xSpacing * j, 0f, 0f);
                 invader.transform.localPosition = position;
             }
         }

@@ -23,7 +23,6 @@ namespace Txt2Img.ThemedTxt2Img
             {
                 ReinitializeCollider();
             }
-
         }
 
         private void ApplyPromptResult()
@@ -32,11 +31,11 @@ namespace Txt2Img.ThemedTxt2Img
             var image = GetComponent<Image>();
             if (spriteRenderer != null)
             {
-                spriteRenderer.sprite = CreateSpriteWithOffset();
+                spriteRenderer.sprite = CreateSpriteFromPromptResult();
             }
             else if (image != null)
             {
-                image.sprite = CreateSpriteWithOffset();
+                image.sprite = CreateSpriteFromPromptResult();
             }
         }
 
@@ -45,7 +44,7 @@ namespace Txt2Img.ThemedTxt2Img
             var (x, y) = GetTransformScale();
             transform.localScale = new Vector3() { x = x, y = y };
         }
-        
+
         private void ReinitializeCollider()
         {
             var currentPolygonCollider = GetComponent<PolygonCollider2D>();
@@ -60,7 +59,7 @@ namespace Txt2Img.ThemedTxt2Img
             newPolygonCollider.isTrigger = true;
         }
 
-        private Sprite CreateSpriteWithOffset()
+        private Sprite CreateSpriteFromPromptResult()
         {
             var spriteTexture = PromptHelper.GetPromptResult(promptTheme).texture;
             var (width, height) = GetSpriteSize();
@@ -69,42 +68,29 @@ namespace Txt2Img.ThemedTxt2Img
             return Sprite.Create(spriteTexture, spriteRect, new Vector2 { x = 0.5f, y = 0.5f });
         }
 
-        private (int width, int height) GetSpriteSize()
-        {
-            switch (promptTheme)
+        private (int width, int height) GetSpriteSize() =>
+            promptTheme switch
             {
-                case PromptTheme.Background:
-                    return (Constants.GeneratedBackgroundWidth, Constants.GeneratedBackgroundHeight);
-                case PromptTheme.UIButton:
-                    return (Constants.GeneratedUiButtonWidth, Constants.GeneratedUiButtonHeight);
-                case PromptTheme.PlayerProjectile:
-                case PromptTheme.Enemy:
-                case PromptTheme.Player:
-                case PromptTheme.BossEnemy:
-                case PromptTheme.EnemyProjectile:
-                case PromptTheme.UIBackground:
-                default:
-                    return (Constants.GeneratedSpriteWidth, Constants.GeneratedSpriteHeight);
-            }
-        }
-        
-        private (float x, float y) GetTransformScale()
-        {
-            switch (promptTheme)
+                PromptTheme.Background => (Constants.GeneratedBackgroundWidth, Constants.GeneratedBackgroundHeight),
+                PromptTheme.UIButton => (Constants.GeneratedUiButtonWidth, Constants.GeneratedUiButtonHeight),
+                PromptTheme.PlayerProjectile or
+                    PromptTheme.Enemy or
+                    PromptTheme.Player or
+                    PromptTheme.BossEnemy or
+                    PromptTheme.EnemyProjectile or
+                    PromptTheme.UIBackground => (Constants.GeneratedSpriteWidth, Constants.GeneratedSpriteHeight),
+                _ => (Constants.GeneratedSpriteWidth, Constants.GeneratedSpriteHeight)
+            };
+
+        private (float x, float y) GetTransformScale() =>
+            promptTheme switch
             {
-                case PromptTheme.PlayerProjectile:
-                case PromptTheme.EnemyProjectile:
-                    return (0.2f, 0.2f);
-                case PromptTheme.Background:
-                    return (5.5f, 5.5f);
-                case PromptTheme.Enemy:
-                    return (0.7f, 0.7f);
-                case PromptTheme.BossEnemy:
-                    return (1.1f, 1.1f);
-                case PromptTheme.Player:
-                default:
-                    return (1.0f, 1.0f);
-            }
-        }
+                PromptTheme.PlayerProjectile or PromptTheme.EnemyProjectile => (0.2f, 0.2f),
+                PromptTheme.Background => (5.5f, 5.5f),
+                PromptTheme.Enemy => (0.5f, 0.5f),
+                PromptTheme.BossEnemy => (1.1f, 1.1f),
+                PromptTheme.Player or PromptTheme.UIBackground or PromptTheme.UIButton => (1.0f, 1.0f),
+                _ => (1.0f, 1.0f)
+            };
     }
 }
