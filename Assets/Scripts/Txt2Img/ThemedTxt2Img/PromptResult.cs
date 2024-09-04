@@ -88,6 +88,11 @@ namespace Txt2Img.ThemedTxt2Img
 
         public void UpdateGenerationProgress(int progress)
         {
+            if (progress < 15)
+            {
+                return;
+            }
+
             if (!imageGameObject.activeSelf)
             {
                 imageGameObject.SetActive(true);
@@ -97,6 +102,7 @@ namespace Txt2Img.ThemedTxt2Img
             if (progress > 99)
             {
                 downloadPercentage.SetActive(false);
+                imageGameObject.SetActive(true);
             }
         }
 

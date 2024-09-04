@@ -10,6 +10,8 @@ public class GalleryResult : MonoBehaviour
 
     public TextMeshProUGUI resultName;
 
+    private string resultPrompt;
+
     private TabGroup tabGroup;
 
     private void Start()
@@ -24,6 +26,7 @@ public class GalleryResult : MonoBehaviour
         var filenameThemePart = filenameWithoutExtension.Split("_")[0];
         
         resultName.text = prompt + "\n" + "(" + filenameThemePart.ToPromptTheme() + ")";
+        resultPrompt = prompt;
         image.sprite = sprite;
     }
 
@@ -43,5 +46,6 @@ public class GalleryResult : MonoBehaviour
 
         tabGroup.ToGameElementsTab();
         editingPromptResult.DisableEditMode();  
+        editingPromptResult.ApplyPromptLabel(resultPrompt);  
     }
 }

@@ -7,21 +7,18 @@ using UnityEngine.UI;
 
 public class Invaders : MonoBehaviour
 {
-    [Header("Invaders")]
-    public Invader[] prefabs = new Invader[5];
+    [Header("Invaders")] public Invader[] prefabs = new Invader[5];
     public AnimationCurve speed = new AnimationCurve();
 
     private Vector3 direction = Vector3.right;
     private Vector3 initialPosition;
 
-    [Header("Grid")]
-    public int rows = 5;
+    [Header("Grid")] public int rows = 5;
     public int columns = 11;
-    public float xSpacing =  4.0f;
+    public float xSpacing = 4.0f;
     public float ySpacing = 3.0f;
 
-    [Header("Missiles")]
-    public Projectile missilePrefab;
+    [Header("Missiles")] public Projectile missilePrefab;
     public float missileSpawnRate = 1f;
 
     private void Awake()
@@ -33,21 +30,21 @@ public class Invaders : MonoBehaviour
 
     private void CreateInvaderGrid()
     {
-        for (int i = 0; i < rows; i++)
+        for (var i = 0; i < rows; i++)
         {
-            float width = (xSpacing * (columns - 1));
-            float height = (ySpacing * (rows - 1));
+            var width = (xSpacing * (columns - 1));
+            var height = (ySpacing * (rows - 1));
 
-            Vector2 centerOffset = new Vector2(-width * 0.5f, -height * 0.5f);
-            Vector3 rowPosition = new Vector3(centerOffset.x, (ySpacing * i) + centerOffset.y, 0f);
+            var centerOffset = new Vector2(-width * 0.5f, -height * 0.5f);
+            var rowPosition = new Vector3(centerOffset.x, (ySpacing * i) + centerOffset.y, 0f);
 
-            for (int j = 0; j < columns; j++)
+            for (var j = 0; j < columns; j++)
             {
                 var prefabToInstantiate = prefabs[i];
 
-                Invader invader = Instantiate(prefabToInstantiate, transform);
+                var invader = Instantiate(prefabToInstantiate, transform);
 
-                Vector3 position = rowPosition + new Vector3(xSpacing * j, 0f, 0f);
+                var position = rowPosition + new Vector3(xSpacing * j, 0f, 0f);
                 invader.transform.localPosition = position;
             }
         }
@@ -62,20 +59,18 @@ public class Invaders : MonoBehaviour
     {
         int amountAlive = GetAliveCount();
 
-        // No missiles should spawn when no invaders are alive
-        if (amountAlive == 0) {
+        if (amountAlive == 0)
+        {
             return;
         }
 
         foreach (Transform invader in transform)
         {
-            // Any invaders that are killed cannot shoot missiles
-            if (!invader.gameObject.activeInHierarchy) {
+            if (!invader.gameObject.activeInHierarchy)
+            {
                 continue;
             }
 
-            // Random chance to spawn a missile based upon how many invaders are
-            // alive (the more invaders alive the lower the chance)
             if (Random.value < (1f / amountAlive))
             {
                 Instantiate(missilePrefab, invader.position, Quaternion.identity);
@@ -86,37 +81,31 @@ public class Invaders : MonoBehaviour
 
     private void Update()
     {
-        // Calculate the percentage of invaders killed
-        int totalCount = rows * columns;
-        int amountAlive = GetAliveCount();
-        int amountKilled = totalCount - amountAlive;
-        float percentKilled = (float)amountKilled / (float)totalCount;
+        var totalCount = rows * columns;
+        var amountAlive = GetAliveCount();
+        var amountKilled = totalCount - amountAlive;
+        var percentKilled = (float)amountKilled / (float)totalCount;
 
-        // Evaluate the speed of the invaders based on how many have been killed
-        float speed = this.speed.Evaluate(percentKilled);
+        var speed = this.speed.Evaluate(percentKilled);
         transform.position += speed * Time.deltaTime * direction;
 
-        // Transform the viewport to world coordinates so we can check when the
-        // invaders reach the edge of the screen
         Vector3 leftEdge = Camera.main.ViewportToWorldPoint(Vector3.zero);
         Vector3 rightEdge = Camera.main.ViewportToWorldPoint(Vector3.right);
 
-        // The invaders will advance to the next row after reaching the edge of
-        // the screen
         foreach (Transform invader in transform)
         {
-            // Skip any invaders that have been killed
-            if (!invader.gameObject.activeInHierarchy) {
+            if (!invader.gameObject.activeInHierarchy)
+            {
                 continue;
             }
 
-            // Check the left edge or right edge based on the current direction
             if (direction == Vector3.right && invader.position.x >= (rightEdge.x - 1f))
             {
                 AdvanceRow();
                 break;
             }
-            else if (direction == Vector3.left && invader.position.x <= (leftEdge.x + 1f))
+
+            if (direction == Vector3.left && invader.position.x <= (leftEdge.x + 1f))
             {
                 AdvanceRow();
                 break;
@@ -126,10 +115,8 @@ public class Invaders : MonoBehaviour
 
     private void AdvanceRow()
     {
-        // Flip the direction the invaders are moving
-        direction = new Vector3(-direction.x, 0f, 0f);
+        direction = new(-direction.x, 0f, 0f);
 
-        // Move the entire grid of invaders down a row
         Vector3 position = transform.position;
         position.y -= 1f;
         transform.position = position;
@@ -140,23 +127,11 @@ public class Invaders : MonoBehaviour
         direction = Vector3.right;
         transform.position = initialPosition;
 
-        foreach (Transform invader in transform) {
+        foreach (Transform invader in transform)
+        {
             invader.gameObject.SetActive(true);
         }
     }
 
-    public int GetAliveCount()
-    {
-        int count = 0;
-
-        foreach (Transform invader in transform)
-        {
-            if (invader.gameObject.activeSelf) {
-                count++;
-            }
-        }
-
-        return count;
-    }
-
+    public int GetAliveCount() => transform.Cast<Transform>().Count(invader => invader.gameObject.activeSelf);
 }

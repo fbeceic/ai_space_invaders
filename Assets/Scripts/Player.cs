@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(PolygonCollider2D))]
@@ -7,6 +8,7 @@ public class Player : MonoBehaviour
     public float speed = 5f;
     public Projectile laserPrefab;
     public GameObject pauseMenu;
+    public Image canvasImage;
 
     private Projectile laser;
     
@@ -34,8 +36,22 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            pauseMenu.SetActive(!pauseMenu.activeSelf);
+            if (pauseMenu.activeSelf)
+            {
+                // Resume the game
+                Time.timeScale = 1;
+                pauseMenu.SetActive(false);
+                SetScreenTintAlpha(0f); // Fully transparent
+            }
+            else
+            {
+                // Pause the game
+                Time.timeScale = 0;
+                pauseMenu.SetActive(true);
+                SetScreenTintAlpha(0.5f); // Semi-transparent black
+            }
         }
+        
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -46,4 +62,15 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void SetScreenTintAlpha(float alpha)
+    {
+        if (canvasImage == null)
+        {
+            return;
+        }
+        
+        var color = canvasImage.color;
+        color.a = alpha;
+        canvasImage.color = color;
+    }
 }

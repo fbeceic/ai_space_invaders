@@ -10,7 +10,7 @@ using UnityEngine;
 /// </summary>
 public class SDSettings : ScriptableObject
 {
-    [Header("AUTOMATIC1111 Settings")] public string StableDiffusionServerURL = "http://127.0.0.1:7860";
+    [Header("SD Settings")] public string StableDiffusionServerURL = "http://127.0.0.1:7860";
     public string ModelsAPI = "/sdapi/v1/sd-models";
     public string TextToImageAPI = "/sdapi/v1/txt2img";
     public string OptionAPI = "/sdapi/v1/options";
@@ -30,23 +30,8 @@ public class SDSettings : ScriptableObject
     [Header("URP Settings")] public bool useUniversalRenderPipeline = false;
 }
 
-/// <summary>
-/// Data structure to easily serialize the parameters to send
-/// to the Stable Diffusion server when generating an image via Txt2Img.
-/// </summary>
 class SDParamsInTxt2Img
 {
-    // public bool layerdiffusion_enabled = true;
-    // public string layerdiffusion_method = "(SD1.5) Only Generate Transparent Image (Attention Injection)";
-    // public string layerdiffusion_resize_mode = "Crop and Resize";
-    // public float layerdiffusion_weight = 1;
-    // public float layerdiffusion_ending_step = 1;
-    // public bool layerdiffusion_fg_image = false;
-    // public bool layerdiffusion_bg_image = false;
-    // public bool layerdiffusion_blend_image = false;
-    // public string layerdiffusion_fg_additional_prompt = "";
-    // public string layerdiffusion_bg_additional_prompt = "";
-    // public string layerdiffusion_blend_additional_prompt = "";
     public bool enable_hr = false;
     public float denoising_strength = 0;
     public int firstphase_width = 0;
@@ -98,41 +83,10 @@ class SDParamsInTxt2Img
             }
         }
     };
-    
-    // Dictionary<string, object> extra_generation_params = new Dictionary<string, object>
-    // {
-    //     { "layerdiffusion_enabled", true },
-    //     { "layerdiffusion_method", "(SD1.5) Only Generate Transparent Image (Attention Injection)" },
-    //     { "layerdiffusion_weight", 1 },
-    //     { "layerdiffusion_ending_step", 1 },
-    //     { "layerdiffusion_fg_image", false },
-    //     { "layerdiffusion_bg_image", false },
-    //     { "layerdiffusion_blend_image", false },
-    //     { "layerdiffusion_resize_mode", "Crop and Resize" },
-    //     { "layerdiffusion_fg_additional_prompt", "" },
-    //     { "layerdiffusion_bg_additional_prompt", "" },
-    //     { "layerdiffusion_blend_additional_prompt", "" }
-    // };
 }
 
-/// <summary>
-/// Data structure to easily deserialize the data returned
-/// by the Stable Diffusion server after generating an image via Txt2Img.
-/// </summary>
 class SDParamsOutTxt2Img
 {
-    // public bool layerdiffusion_enabled = true;
-    // public string layerdiffusion_method = "(SD1.5) Only Generate Transparent Image (Attention Injection)";
-    // public string layerdiffusion_resize_mode = "Crop and Resize";
-    // public float layerdiffusion_weight = 1;
-    // public float layerdiffusion_ending_step = 1;
-    // public bool layerdiffusion_fg_image = false;
-    // public bool layerdiffusion_bg_image = false;
-    // public bool layerdiffusion_blend_image = false;
-    // public string layerdiffusion_fg_additional_prompt = "";
-    // public string layerdiffusion_bg_additional_prompt = "";
-    // public string layerdiffusion_blend_additional_prompt = "";
-
     public bool enable_hr = false;
     public float denoising_strength = 0;
     public int firstphase_width = 0;
@@ -176,108 +130,6 @@ class SDParamsOutTxt2Img
 }
 
 /// <summary>
-/// Data structure to easily serialize the parameters to send
-/// to the Stable Diffusion server when generating an image via Img2Img.
-/// </summary>
-class SDParamsInImg2Img
-{
-    public string[] init_images = { "" };
-    public int resize_mode = 0;
-
-    public float denoising_strength = 0.75f;
-
-    //    public string mask = ""; // including this throws a 500 Internal Server error
-    public int mask_blur = 4;
-    public int inpainting_fill = 0;
-    public bool inpaint_full_res = true;
-    public int inpaint_full_res_padding = 0;
-    public int inpainting_mask_invert = 0;
-    public int initial_noise_multiplier = 1; // if 0, output image looks more blurry
-    public string prompt = "";
-    public string[] styles = { "" };
-    public long seed = -1;
-    public long subseed = -1;
-    public int subseed_strength = 0;
-    public int seed_resize_from_h = -1;
-    public int seed_resize_from_w = -1;
-    public string sampler_name = "Euler a";
-    public int batch_size = 1;
-    public int n_iter = 1;
-    public int steps = 50;
-    public float cfg_scale = 7;
-    public int width = 512;
-    public int height = 512;
-    public bool restore_faces = false;
-    public bool tiling = false;
-    public string negative_prompt = "";
-    public float eta = 0;
-    public float s_churn = 0;
-    public float s_tmax = 0;
-    public float s_tmin = 0;
-    public float s_noise = 1;
-    public SettingsOveride override_settings;
-    public bool override_settings_restore_afterwards = true;
-    public string[] script_args = { };
-    public string sampler_index = "Euler";
-    public bool include_init_images = false;
-    //    public string script_name = ""; // including this throws a 422 Unprocessable Entity error
-
-    public class SettingsOveride
-    {
-    }
-}
-
-/// <summary>
-/// Data structure to easily deserialize the data returned
-/// by the Stable Diffusion server after generating an image via Img2Img.
-/// </summary>
-class SDParamsOutImg2Img
-{
-    public string[] init_images = { "" };
-    public float resize_mode = 0;
-    public float denoising_strength = 0.75f;
-    public string mask = "";
-    public float mask_blur = 4;
-    public float inpainting_fill = 0;
-    public bool inpaint_full_res = true;
-    public float inpaint_full_res_padding = 0;
-    public float inpainting_mask_invert = 0;
-    public float initial_noise_multiplier = 0;
-    public string prompt = "";
-    public string[] styles = { "" };
-    public long seed = -1;
-    public long subseed = -1;
-    public float subseed_strength = 0;
-    public float seed_resize_from_h = -1;
-    public float seed_resize_from_w = -1;
-    public string sampler_name = "";
-    public float batch_size = 1;
-    public float n_iter = 1;
-    public int steps = 50;
-    public float cfg_scale = 7;
-    public int width = 512;
-    public int height = 512;
-    public bool restore_faces = false;
-    public bool tiling = false;
-    public string negative_prompt = "";
-    public float eta = 0;
-    public float s_churn = 0;
-    public float s_tmax = 0;
-    public float s_tmin = 0;
-    public float s_noise = 1;
-    public SettingsOveride override_settings;
-    public bool override_settings_restore_afterwards = true;
-    public string[] script_args = { };
-    public string sampler_index = "Euler";
-    public bool include_init_images = false;
-    public string script_name = "";
-
-    public class SettingsOveride
-    {
-    }
-}
-
-/// <summary>
 /// Data structure to easily deserialize the JSON response returned
 /// by the Stable Diffusion server after generating an image via Txt2Img.
 ///
@@ -295,26 +147,6 @@ class SDResponseTxt2Img
     public SDParamsOutTxt2Img parameters;
     public string info;
 }
-
-/// <summary>
-/// Data structure to easily deserialize the JSON response returned
-/// by the Stable Diffusion server after generating an image via Img2Img.
-///
-/// It will contain the generated images (in Ascii Byte64 format) and
-/// the parameters used by Stable Diffusion.
-/// 
-/// Note that the out parameters returned should be almost identical to the in
-/// parameters that you have submitted to the server for image generation, 
-/// to the exception of the seed which will contain the value of the seed used 
-/// for the generation if you have used -1 for value (random).
-/// </summary>
-class SDResponseImg2Img
-{
-    public string[] images;
-    public SDParamsOutImg2Img parameters;
-    public string info;
-}
-
 
 /// <summary>
 /// Data structure to help serialize into a JSON the model to be used by Stable Diffusion.

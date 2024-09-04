@@ -86,7 +86,7 @@ namespace Txt2Img.ThemedTxt2Img
             promptTheme switch
             {
                 PromptTheme.PlayerProjectile or PromptTheme.EnemyProjectile => (0.2f, 0.2f),
-                PromptTheme.Background => (5.5f, 5.5f),
+                PromptTheme.Background => (1.0f, 1.0f),
                 PromptTheme.Enemy => (0.5f, 0.5f),
                 PromptTheme.BossEnemy => (1.1f, 1.1f),
                 PromptTheme.Player or PromptTheme.UIBackground or PromptTheme.UIButton => (1.0f, 1.0f),

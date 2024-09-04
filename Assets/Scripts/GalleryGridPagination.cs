@@ -49,8 +49,5 @@
             LoadCurrentPage();
         }
 
-        void LoadCurrentPage()
-        {
-            loadImagesToGrid.LoadImages(gridLayout.GetCurrentPage(), gridLayout.itemsPerPage);
-        }
+        void LoadCurrentPage() => loadImagesToGrid.LoadImages(gridLayout.GetCurrentPage(), gridLayout.itemsPerPage);
     }

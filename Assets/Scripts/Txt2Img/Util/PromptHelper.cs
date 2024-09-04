@@ -22,6 +22,7 @@ namespace Txt2Img.Util
 
             if (!diffusionGenerator.generating)
             {
+                promptResult.imageGameObject.SetActive(false);
                 monoBehaviour.StartCoroutine(diffusionGenerator.GenerateAsync(promptResult.UpdateGenerationProgress));
             }
 
