@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "ai_space_invaders.sln"
+    "dotnet.defaultSolution": "prompt_invaders.sln"
 }

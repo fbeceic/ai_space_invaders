@@ -21,23 +21,21 @@ public class GalleryResult : MonoBehaviour
 
     public void ApplyResultFeatures(string filename, Sprite sprite)
     {
-        var filenameWithoutExtension = filename.Substring(0, filename.LastIndexOf(".", StringComparison.Ordinal));
-        var prompt = filenameWithoutExtension.Split("_")[1];
-        var filenameThemePart = filenameWithoutExtension.Split("_")[0];
+        var (prompt, _, promptThemeString) = AIManager.Instance.ResolveAttributesFromFilename(filename);
         
-        resultName.text = prompt + "\n" + "(" + filenameThemePart.ToPromptTheme() + ")";
+        resultName.text = prompt + "\n" + "(" + promptThemeString + ")";
         resultPrompt = prompt;
         image.sprite = sprite;
     }
 
     public void SwitchPromptImage()
     {
-        if (!AIManager.Instance.EditingPromptResult)
+        if (!AIManager.Instance.editingPromptResult)
         {
             return;
         }
 
-        var editingPromptResult = AIManager.Instance.EditingPromptResult;
+        var editingPromptResult = AIManager.Instance.editingPromptResult;
         var imageToChange = editingPromptResult.imageGameObject.gameObject.GetComponent<Image>().sprite;
         editingPromptResult.imageGameObject.gameObject.GetComponent<Image>().sprite = image.sprite;
 

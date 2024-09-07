@@ -173,15 +173,27 @@ public class StableDiffusionText2Image : MonoBehaviour
         {
             var root = Application.streamingAssetsPath;
             var mat = Path.Combine(root, "SDImages");
-            filename = Path.Combine(mat, $"{promptTheme.ToString().ToLower()}_{prompt.Split(", ")[0]}.png");
 
+            // Ensure the directories exist
             if (!Directory.Exists(root))
                 Directory.CreateDirectory(root);
             if (!Directory.Exists(mat))
                 Directory.CreateDirectory(mat);
 
-            if (File.Exists(filename))
-                File.Delete(filename);
+            // Construct the initial file name
+            string baseFilename = $"{promptTheme.ToString().ToLower()}_{prompt.Split(", ")[0]}";
+            string filePath = Path.Combine(mat, $"{baseFilename}.png");
+            string finalFilename = filePath;
+
+            // Check if file exists, and if it does, append a number to the filename
+            int counter = 1;
+            while (File.Exists(finalFilename))
+            {
+                finalFilename = Path.Combine(mat, $"{baseFilename} ({counter}).png");
+                counter++;
+            }
+
+            filename = finalFilename;
         }
         catch (Exception e)
         {

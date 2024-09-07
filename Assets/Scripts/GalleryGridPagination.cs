@@ -1,3 +1,4 @@
+    using System;
     using System.IO;
     using Txt2Img.Util;
     using UnityEngine;
@@ -5,7 +6,7 @@
 
     public class GalleryGridPagination : MonoBehaviour
     {
-        private int numberOfPages;
+        public int numberOfPages;
         
         public FlexibleGridLayout gridLayout;
         public LoadImagesToGrid loadImagesToGrid;
@@ -14,10 +15,15 @@
 
         void Start()
         {
-            numberOfPages = Directory.GetFiles(Constants.GeneratedImagesOutputFolder, "*.png").Length / gridLayout.itemsPerPage;
             nextPageButton.onClick.AddListener(OnNextPage);
             previousPageButton.onClick.AddListener(OnPreviousPage);
             
+            LoadCurrentPage();
+        }
+
+        void OnEnable()
+        {
+            gridLayout.currentPage = 0;
             LoadCurrentPage();
         }
 
@@ -29,6 +35,7 @@
 
         void OnNextPage()
         {
+
             if (gridLayout.GetCurrentPage() >= numberOfPages - 1)
             {
                 return;

@@ -53,7 +53,7 @@ public class FlexibleGridLayout : LayoutGroup
 
         if (fitType == FitType.Width || fitType == FitType.Height || fitType == FitType.Uniform)
         {
-            int childCount = Mathf.Min(rectChildren.Count, itemsPerPage); // Only consider itemsPerPage children for layout
+            int childCount = Mathf.Min(rectChildren.Count, itemsPerPage);
             float squareRoot = Mathf.Sqrt(childCount);
             rows = columns = Mathf.CeilToInt(squareRoot);
             

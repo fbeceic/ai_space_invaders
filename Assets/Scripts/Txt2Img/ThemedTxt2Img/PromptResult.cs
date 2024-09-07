@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -17,7 +18,7 @@ namespace Txt2Img.ThemedTxt2Img
         [FormerlySerializedAs("promptText")] public string text = "camel";
 
         [FormerlySerializedAs("promptTextGameObject")]
-        public GameObject textGameObject;
+        public GameObject textGameObject = null;
 
         [FormerlySerializedAs("promptImageGameObject")]
         public GameObject imageGameObject;
@@ -26,6 +27,8 @@ namespace Txt2Img.ThemedTxt2Img
         
         public GameObject downloadPercentage;
 
+        public PromptResult repromptModalResult;
+        
         private StableDiffusionText2Image diffusionGenerator;
         
         private TabGroup tabGroup;
@@ -37,26 +40,22 @@ namespace Txt2Img.ThemedTxt2Img
             diffusionGenerator = imageGameObject.gameObject.GetComponent<StableDiffusionText2Image>();
         }
 
-        public void ApplyPromptLabel(string promptText)
+        public void OpenRepromptModal()
         {
-            textGameObject.gameObject.GetComponent<TextMeshProUGUI>().text = promptText + "\n" + "(" + theme.ToThemeString() + ")";
-            text = promptText;
+            AIManager.Instance.editingPromptResult = this;
+            repromptModalResult.gameObject.SetActive(true);
         }
 
-        public void RepromptResult()
+        public IEnumerator ProcessReprompting(bool enhancePrompt = true)
         {
-            ApplyPromptLabel(text);
-            StartCoroutine(ProcessReprompting());
-        }
-
-        private IEnumerator ProcessReprompting()
-        {
-            yield return PromptHelper.InvokeTxt2ImgGeneration(this, diffusionGenerator, text, this);
+            yield return PromptHelper.InvokeTxt2ImgGeneration(this, diffusionGenerator, text, this, enhancePrompt);
 
             while (diffusionGenerator.generating)
             {
                 yield return null;
             }
+
+            yield return true;
         }
 
         public void SaveSpriteToAIManager()
@@ -90,6 +89,7 @@ namespace Txt2Img.ThemedTxt2Img
         {
             if (progress < 15)
             {
+                downloadPercentage.GetComponent<TextMeshProUGUI>().text = 0 + "%";
                 return;
             }
 
@@ -108,14 +108,27 @@ namespace Txt2Img.ThemedTxt2Img
 
         public void EnableEditMode()    
         {
-            AIManager.Instance.EditingPromptResult = this;
+            AIManager.Instance.editingPromptResult = this;
             tabGroup.ToGalleryTab();
         }
 
         public void DisableEditMode()
         {
-            AIManager.Instance.EditingPromptResult = null;
+            AIManager.Instance.editingPromptResult = null;
             SaveSpriteToAIManager();
+        }
+        
+        public void ApplyPromptLabel(string promptText)
+        {
+            try
+            {
+                textGameObject.gameObject.GetComponent<TextMeshProUGUI>().text = promptText + "\n" + "(" + theme.ToThemeString() + ")";
+                text = promptText;
+            }
+            catch (UnassignedReferenceException e)
+            {
+                
+            }
         }
     }
 }

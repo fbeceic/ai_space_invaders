@@ -10,14 +10,16 @@ namespace Txt2Img.Util
     public static class PromptHelper
     {
         public static IEnumerator InvokeTxt2ImgGeneration(MonoBehaviour monoBehaviour,
-            StableDiffusionText2Image diffusionGenerator, string prompt, PromptResult promptResult)
+            StableDiffusionText2Image diffusionGenerator, string prompt, PromptResult promptResult, bool enhancePrompt = true)
         {
+            AIManager.Instance.isDiffusionInProgress = true;
+            
             promptResult.imageGameObject.GetComponent<Image>().sprite = null;
             promptResult.downloadPercentage.SetActive(true);
             promptResult.loadingSpinner.SetActive(true);
 
             diffusionGenerator.PromptTheme = promptResult.theme;
-            diffusionGenerator.Prompt = ExtendPrompt(prompt, promptResult.theme, PromptType.Main);
+            diffusionGenerator.Prompt = enhancePrompt ? ExtendPrompt(prompt, promptResult.theme, PromptType.Main) : prompt;
             diffusionGenerator.NegativePrompt = ExtendPrompt("", promptResult.theme, PromptType.Negative);
 
             if (!diffusionGenerator.generating)
@@ -46,6 +48,8 @@ namespace Txt2Img.Util
             
             promptResult.downloadPercentage.SetActive(false);
             promptResult.loadingSpinner.SetActive(false);
+            
+            AIManager.Instance.isDiffusionInProgress = false;
         }
 
         private static string ExtendPrompt(string prompt, PromptTheme theme, PromptType type)

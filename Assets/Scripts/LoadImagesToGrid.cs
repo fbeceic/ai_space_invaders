@@ -1,26 +1,51 @@
-using System;
 using UnityEngine;
-using UnityEngine.UI;
 using System.IO;
 using System.Linq;
-using TMPro;
 using Txt2Img.Util;
+using UnityEngine.Serialization;
 
 public class LoadImagesToGrid : MonoBehaviour
 {
-    public string folderPath = Constants.GeneratedImagesOutputFolder;
     public FlexibleGridLayout flexibleGridLayout;
     public GameObject imagePrefab;
+    public GalleryGridPagination galleryGridPagination;
 
     public void LoadImages(int pageNumber, int pageSize)
     {
+        var folderPath = Constants.GeneratedImagesOutputFolder;
+        var editingPromptResult = AIManager.Instance.editingPromptResult;
+        PromptTheme? activePromptTheme;
+        if (editingPromptResult != null)
+        {
+            activePromptTheme = editingPromptResult.theme;
+        }
+        else
+        {
+            activePromptTheme = null;
+        }
+        
         if (Directory.Exists(folderPath))
         {
             ClearExistingImages();
 
             var files = Directory.GetFiles(folderPath, "*.png")
+                .Where(file =>
+                {
+                    var (prompt, promptTheme, promptThemeString) = AIManager.Instance.ResolveAttributesFromFilename(Path.GetFileName(file));
+                    if (activePromptTheme == null || activePromptTheme == promptTheme)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                })
                 .OrderByDescending(File.GetLastWriteTime)
                 .ToList();
+
+            AIManager.Instance.galleryResultFilenames = files;
+            galleryGridPagination.numberOfPages = files.Count / galleryGridPagination.gridLayout.itemsPerPage;
             
             var pagedFiles = files.Skip(pageNumber * pageSize).Take(pageSize).ToList();
 

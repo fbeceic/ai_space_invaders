@@ -17,8 +17,8 @@ public class MysteryShip : MonoBehaviour
         Vector3 leftEdge = Camera.main.ViewportToWorldPoint(Vector3.zero);
         Vector3 rightEdge = Camera.main.ViewportToWorldPoint(Vector3.right);
 
-        leftDestination = new Vector2(leftEdge.x - 3f, transform.position.y);
-        rightDestination = new Vector2(rightEdge.x + 3f, transform.position.y);
+        leftDestination = new Vector2(leftEdge.x - 10f, transform.position.y);
+        rightDestination = new Vector2(rightEdge.x + 10f, transform.position.y);
 
         Despawn();
     }

@@ -32,19 +32,35 @@ namespace Txt2Img.Util
                 _ => theme.ToString()
             };
         }
-        
-        public static string ToPromptTheme(this string filenameThemePart)
+
+        public static string ToPromptThemeString(this string filenameThemePart)
         {
             return filenameThemePart.ToLower() switch
             {
                 "background" => ToThemeString(PromptTheme.Background),
-                "player" =>  ToThemeString(PromptTheme.Player),
-                "enemy" =>  ToThemeString(PromptTheme.Enemy),
-                "bossenemy" =>  ToThemeString(PromptTheme.BossEnemy),
-                "playerprojectile" =>  ToThemeString(PromptTheme.PlayerProjectile),
-                "enemyprojectile" =>  ToThemeString(PromptTheme.EnemyProjectile),
-                "uibackground" =>  ToThemeString(PromptTheme.UIBackground),
-                "uibutton" =>  ToThemeString(PromptTheme.UIButton),
+                "player" => ToThemeString(PromptTheme.Player),
+                "enemy" => ToThemeString(PromptTheme.Enemy),
+                "bossenemy" => ToThemeString(PromptTheme.BossEnemy),
+                "playerprojectile" => ToThemeString(PromptTheme.PlayerProjectile),
+                "enemyprojectile" => ToThemeString(PromptTheme.EnemyProjectile),
+                "uibackground" => ToThemeString(PromptTheme.UIBackground),
+                "uibutton" => ToThemeString(PromptTheme.UIButton),
+                _ => throw new ArgumentException("Invalid theme string", nameof(filenameThemePart))
+            };
+        }
+
+        public static PromptTheme ToPromptTheme(this string filenameThemePart)
+        {
+            return filenameThemePart.ToLower() switch
+            {
+                "background" => (PromptTheme.Background),
+                "player" => (PromptTheme.Player),
+                "enemy" => (PromptTheme.Enemy),
+                "bossenemy" => (PromptTheme.BossEnemy),
+                "playerprojectile" => (PromptTheme.PlayerProjectile),
+                "enemyprojectile" => (PromptTheme.EnemyProjectile),
+                "uibackground" => (PromptTheme.UIBackground),
+                "uibutton" => (PromptTheme.UIButton),
                 _ => throw new ArgumentException("Invalid theme string", nameof(filenameThemePart))
             };
         }
