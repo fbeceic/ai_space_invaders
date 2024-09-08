@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,7 +12,12 @@ public class Player : MonoBehaviour
     public Image canvasImage;
 
     private Projectile laser;
-    
+
+    void OnEnable()
+    {
+        Time.timeScale = 1;
+
+    }
 
     private void Update()
     {
@@ -32,23 +38,22 @@ public class Player : MonoBehaviour
 
         if (laser == null && (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))) {
             laser = Instantiate(laserPrefab, transform.position, Quaternion.identity);
+            GameManager.Instance.audioSource.PlayOneShot(GameManager.Instance.playerShootSound);
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (pauseMenu.activeSelf)
             {
-                // Resume the game
                 Time.timeScale = 1;
                 pauseMenu.SetActive(false);
-                SetScreenTintAlpha(0f); // Fully transparent
+                SetScreenTintAlpha(0f);
             }
             else
             {
-                // Pause the game
                 Time.timeScale = 0;
                 pauseMenu.SetActive(true);
-                SetScreenTintAlpha(0.5f); // Semi-transparent black
+                SetScreenTintAlpha(0.5f); 
             }
         }
         

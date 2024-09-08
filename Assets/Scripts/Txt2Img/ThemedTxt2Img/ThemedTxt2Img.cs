@@ -15,7 +15,18 @@ namespace Txt2Img.ThemedTxt2Img
 
         public List<TMP_InputField> inputFields;
 
+        public Button goButton;
+
         [SerializeField] private List<Prompt> inputPrompts;
+
+
+        void Update()
+        {
+            if (MenuManager.Instance.currentMenu == 0)
+            {
+                goButton.interactable = inputFields.All(field => field.text.Length > 0);
+            }
+        }
 
         public void StartTxt2ImgGeneration()
         {

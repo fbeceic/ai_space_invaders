@@ -21,3 +21,6 @@ Prompt Invaders is a modern reinterpretation of the classic Space Invaders game,
 - **Unity**: The primary game development platform used for gameplay mechanics, UI, and physics.
 - **Stable Diffusion**: This AI model is responsible for transforming text-based inputs into customized game visuals.
 - **SD WebUI Forge API**: Facilitates the communication between the game and the *Stable Diffusion* AI for real-time image generation.
+
+
+**Note**: requires stable-diffusion-webui-forge with sd-forge-layerdiffuse plugin running in the background with '--api' flag enabled.

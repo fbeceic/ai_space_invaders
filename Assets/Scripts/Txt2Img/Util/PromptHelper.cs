@@ -13,7 +13,8 @@ namespace Txt2Img.Util
             StableDiffusionText2Image diffusionGenerator, string prompt, PromptResult promptResult, bool enhancePrompt = true)
         {
             AIManager.Instance.isDiffusionInProgress = true;
-            
+            AIManager.Instance._audioSource.PlayOneShot(AIManager.Instance.spriteGenerateBeginSound);
+                
             promptResult.imageGameObject.GetComponent<Image>().sprite = null;
             promptResult.downloadPercentage.SetActive(true);
             promptResult.loadingSpinner.SetActive(true);
@@ -48,7 +49,8 @@ namespace Txt2Img.Util
             
             promptResult.downloadPercentage.SetActive(false);
             promptResult.loadingSpinner.SetActive(false);
-            
+
+            AIManager.Instance._audioSource.PlayOneShot(AIManager.Instance.spriteGenerateEndSound);
             AIManager.Instance.isDiffusionInProgress = false;
         }
 

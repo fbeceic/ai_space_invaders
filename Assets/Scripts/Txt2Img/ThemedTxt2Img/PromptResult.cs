@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
+using JetBrains.Annotations;
 using TMPro;
 using Txt2Img.Util;
 using UnityEngine;
@@ -15,7 +17,7 @@ namespace Txt2Img.ThemedTxt2Img
         [FormerlySerializedAs("promptTheme")] [SerializeField]
         public PromptTheme theme;
 
-        [FormerlySerializedAs("promptText")] public string text = "camel";
+        [FormerlySerializedAs("promptText")] public string text = "";
 
         [FormerlySerializedAs("promptTextGameObject")]
         public GameObject textGameObject = null;
@@ -24,20 +26,36 @@ namespace Txt2Img.ThemedTxt2Img
         public GameObject imageGameObject;
 
         public GameObject loadingSpinner;
-        
+
         public GameObject downloadPercentage;
 
         public PromptResult repromptModalResult;
-        
+
         private StableDiffusionText2Image diffusionGenerator;
-        
+
         private TabGroup tabGroup;
-        
+
         private void Start()
         {
-            SaveSpriteToAIManager();
+            //SaveSpriteToAIManager();
             tabGroup = FindObjectOfType<TabGroup>();
             diffusionGenerator = imageGameObject.gameObject.GetComponent<StableDiffusionText2Image>();
+            if (AIManager.Instance.editingPromptResult == null)
+            {
+                LoadSpriteFromAIManager();
+            }
+        }
+
+        void LoadSpriteFromAIManager()
+        {
+            var savedPromptResult = AIManager.Instance.PromptResults;
+            if (savedPromptResult[theme] != null)
+            {
+                var savedPromptImage = savedPromptResult[theme].Result;
+                var savedPromptText = savedPromptResult[theme].Text;
+                imageGameObject.GetComponent<Image>().sprite = savedPromptImage;
+                ApplyPromptLabel(savedPromptText.Length > 0 ? savedPromptText : "DEFAULT ELEMENT");
+            }
         }
 
         public void OpenRepromptModal()
@@ -58,9 +76,9 @@ namespace Txt2Img.ThemedTxt2Img
             yield return true;
         }
 
-        public void SaveSpriteToAIManager()
+        public void SaveSpriteToAIManager([CanBeNull] string prompt = null)
             => AIManager.Instance.PromptResults[theme] =
-                new() { Theme = theme, Text = text, Result = imageGameObject.gameObject.GetComponent<Image>().sprite };
+                new() { Theme = theme, Text = prompt ?? text, Result = imageGameObject.gameObject.GetComponent<Image>().sprite };
 
         public void ApplyUIBackgrounds()
         {
@@ -106,18 +124,17 @@ namespace Txt2Img.ThemedTxt2Img
             }
         }
 
-        public void EnableEditMode()    
+        public void EnableEditMode()
         {
             AIManager.Instance.editingPromptResult = this;
-            tabGroup.ToGalleryTab();
+            tabGroup.ToGalleryTab(tabGroup.selectedTab);
         }
 
         public void DisableEditMode()
         {
             AIManager.Instance.editingPromptResult = null;
-            SaveSpriteToAIManager();
         }
-        
+
         public void ApplyPromptLabel(string promptText)
         {
             try
@@ -125,9 +142,8 @@ namespace Txt2Img.ThemedTxt2Img
                 textGameObject.gameObject.GetComponent<TextMeshProUGUI>().text = promptText + "\n" + "(" + theme.ToThemeString() + ")";
                 text = promptText;
             }
-            catch (UnassignedReferenceException e)
+            catch (UnassignedReferenceException)
             {
-                
             }
         }
     }

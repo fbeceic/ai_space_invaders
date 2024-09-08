@@ -23,7 +23,7 @@ public class LoadImagesToGrid : MonoBehaviour
         {
             activePromptTheme = null;
         }
-        
+
         if (Directory.Exists(folderPath))
         {
             ClearExistingImages();
@@ -31,22 +31,16 @@ public class LoadImagesToGrid : MonoBehaviour
             var files = Directory.GetFiles(folderPath, "*.png")
                 .Where(file =>
                 {
-                    var (prompt, promptTheme, promptThemeString) = AIManager.Instance.ResolveAttributesFromFilename(Path.GetFileName(file));
-                    if (activePromptTheme == null || activePromptTheme == promptTheme)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                    var (_, promptTheme, _) = AIManager.Instance.ResolveAttributesFromFilename(Path.GetFileName(file));
+
+                    return activePromptTheme == null || activePromptTheme == promptTheme;
                 })
                 .OrderByDescending(File.GetLastWriteTime)
                 .ToList();
 
             AIManager.Instance.galleryResultFilenames = files;
-            galleryGridPagination.numberOfPages = files.Count / galleryGridPagination.gridLayout.itemsPerPage;
-            
+            galleryGridPagination.numberOfPages = Mathf.CeilToInt((float)files.Count / galleryGridPagination.gridLayout.itemsPerPage);
+
             var pagedFiles = files.Skip(pageNumber * pageSize).Take(pageSize).ToList();
 
             foreach (var file in pagedFiles)

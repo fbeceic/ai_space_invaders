@@ -3,29 +3,24 @@ using UnityEngine;
 
 public class TabGroup : MonoBehaviour
 {
-    // These must be 1 to 1, same order in hierarchy
-    [HideInInspector]
     public List<TabButton> tabButtons = new List<TabButton>();
     public List<GameObject> tabPages = new List<GameObject>();
 
     public Color tabIdleColor;
     public Color tabHoverColor;
     public Color tabSelectedColor;
-    private TabButton selectedTab;
+    
+    public TabButton selectedTab;
+    private TabButton lastSelectedTab;
 
     public void Start()
     {
+        tabButtons.Sort((x, y) => x.transform.GetSiblingIndex().CompareTo(y.transform.GetSiblingIndex()));
         foreach (TabButton tabButton in tabButtons)
         {
             if (tabButton.transform.GetSiblingIndex() == 0)
                 OnTabSelected(tabButton);
         }            
-    }
-
-    public void Subscribe(TabButton tabButton)
-    {
-        tabButtons.Add(tabButton);
-        tabButtons.Sort((x, y) => x.transform.GetSiblingIndex().CompareTo(y.transform.GetSiblingIndex()));
     }
 
     public void OnTabEnter(TabButton tabButton)
@@ -91,11 +86,11 @@ public class TabGroup : MonoBehaviour
         OnTabSelected(tabButtons[previousIndex]);
     }
 
-    public void ToGameElementsTab()
+    public void ToElementsTab()
     {
         if (tabButtons.Count >= 0)
         {
-            OnTabSelected(tabButtons[0]); 
+            OnTabSelected(lastSelectedTab); 
         }
         else
         {
@@ -103,8 +98,10 @@ public class TabGroup : MonoBehaviour
         }
     }
 
-    public void ToGalleryTab()
+    public void ToGalleryTab(TabButton fromTab)
     {
+        lastSelectedTab = fromTab;
+        
         if (tabButtons.Count >= 3)
         {
             OnTabSelected(tabButtons[2]); 

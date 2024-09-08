@@ -4,6 +4,7 @@ using Txt2Img.ThemedTxt2Img;
 using Txt2Img.Util;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 public sealed class AIManager : MonoBehaviour
 {
@@ -13,16 +14,42 @@ public sealed class AIManager : MonoBehaviour
     
     public bool isDiffusionInProgress;
     
-    [FormerlySerializedAs("promptResultFilenames")] public  List<string> galleryResultFilenames = new();
+    [FormerlySerializedAs("promptResultFilenames")] public List<string> galleryResultFilenames = new();
     
     public readonly Dictionary<PromptTheme, Prompt> PromptResults = new();
 
     public static AIManager Instance;
 
+    public AudioClip spriteGenerateBeginSound;
+    
+    public AudioClip spriteGenerateEndSound;
+
+    public AudioSource _audioSource;
+
     private void Awake()
     {
+        if (Instance != null)
+        {
+            return;
+        }
+        
         Instance = this;
         DontDestroyOnLoad(gameObject);
+    }
+
+    void Start()
+    {
+        _audioSource = GetComponent<AudioSource>();
+        
+        foreach (var promptResult in promptResultObjects)
+        {
+            var theme = promptResult.theme;
+            var text = promptResult.text;
+            var image = promptResult.imageGameObject;
+            
+            PromptResults[theme] =
+                new() { Theme = theme, Text = text, Result = image.GetComponent<Image>().sprite };
+        }
     }
     
     public (string prompt, PromptTheme promptTheme, string promptThemeString) ResolveAttributesFromFilename(string filename)

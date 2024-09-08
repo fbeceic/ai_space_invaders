@@ -29,7 +29,7 @@ namespace Txt2Img
             {
                 Text = editingPromptResult.text,
                 Theme = editingPromptResult.theme,
-                Result = editingPromptResult.imageGameObject.gameObject.GetComponent<Image>().sprite
+                Result = editingPromptResult.imageGameObject.GetComponent<Image>().sprite
             };
             themeHeader.text = "Reprompt - " + _prompt.Theme.ToThemeString();
             promptImage.sprite = _prompt.Result;
@@ -55,6 +55,15 @@ namespace Txt2Img
             editingPromptResult.ApplyPromptLabel(promptInput.text);
         }
 
-        public void CloseModal() => gameObject.SetActive(false);
+        public void CloseModal() 
+        {
+            StartCoroutine(CloseAfterDelay(0.2f));  
+        }
+
+        private IEnumerator CloseAfterDelay(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            gameObject.SetActive(false);
+        }
     }
 }

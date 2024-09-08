@@ -20,6 +20,8 @@ public class Invaders : MonoBehaviour
 
     [Header("Missiles")] public Projectile missilePrefab;
     public float missileSpawnRate = 1f;
+    
+    public GameManager GameManager;
 
     private void Awake()
     {
@@ -74,6 +76,7 @@ public class Invaders : MonoBehaviour
             if (Random.value < (1f / amountAlive))
             {
                 Instantiate(missilePrefab, invader.position, Quaternion.identity);
+                GameManager.Instance.audioSource.PlayOneShot(GameManager.Instance.enemyShootSound);
                 break;
             }
         }

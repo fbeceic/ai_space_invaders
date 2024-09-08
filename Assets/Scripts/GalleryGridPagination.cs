@@ -13,10 +13,13 @@
         public Button nextPageButton;
         public Button previousPageButton;
 
+        private AudioSource _audioSource;
+
         void Start()
         {
             nextPageButton.onClick.AddListener(OnNextPage);
             previousPageButton.onClick.AddListener(OnPreviousPage);
+            _audioSource = GetComponent<AudioSource>();
             
             LoadCurrentPage();
         }
@@ -41,6 +44,7 @@
                 return;
             }
 
+            _audioSource.Play();
             gridLayout.NextPage();
             LoadCurrentPage();
         }
@@ -52,6 +56,7 @@
                 return;
             }
 
+            _audioSource.Play();
             gridLayout.PreviousPage();
             LoadCurrentPage();
         }

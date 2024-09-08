@@ -9,15 +9,24 @@ public sealed class MenuManager : MonoBehaviour
 
     public static MenuManager Instance;
 
+    public int currentMenu = 0;
+
+    public int menuToShow = 0;
+
     private void Awake()
     {
+        if (Instance != null)
+        {
+            return;
+        }
+        
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }
 
     void Start()
     {
-        //ShowMenu(0); 
+        ShowMenu(Instance.menuToShow);
     }
 
     public void ShowMenu(int index)
@@ -30,6 +39,7 @@ public sealed class MenuManager : MonoBehaviour
         if (index >= 0 && index < menus.Count)
         {
             menus[index].SetActive(true);
+            currentMenu = index;
         }
     }
 

@@ -40,10 +40,11 @@ public class GalleryResult : MonoBehaviour
         editingPromptResult.imageGameObject.gameObject.GetComponent<Image>().sprite = image.sprite;
 
         AIManager.Instance.PromptResults[editingPromptResult.theme] =
-            new() { Theme = editingPromptResult.theme, Text = editingPromptResult.text, Result = imageToChange };
+            new() { Theme = editingPromptResult.theme, Text = resultPrompt, Result = imageToChange };
 
-        tabGroup.ToGameElementsTab();
+        tabGroup.ToElementsTab();
         editingPromptResult.DisableEditMode();  
+        editingPromptResult.SaveSpriteToAIManager(resultPrompt);
         editingPromptResult.ApplyPromptLabel(resultPrompt);  
     }
 }

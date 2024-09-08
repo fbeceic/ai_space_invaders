@@ -12,14 +12,15 @@ public class TabButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHandl
     public UnityEvent onTabSelected;
     public UnityEvent onTabDeselected;
     
+    private AudioSource audioSource;
+
     [HideInInspector]
     public Image background;
 
-    void Start()
+    void Awake()
     {
         background = GetComponent<Image>();
-        if (tabGroup != null)
-            tabGroup.Subscribe(this);
+        audioSource = GetComponent<AudioSource>();
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -41,6 +42,7 @@ public class TabButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHandl
     {
         if (onTabSelected != null)
         {
+            audioSource.Play();
             onTabSelected.Invoke();
         }
     }

@@ -1,10 +1,13 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using Image = UnityEngine.UIElements.Image;
 
 public sealed class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
+    public GameObject explosion;
     [SerializeField] private GameObject gameOverUI;
     [SerializeField] private Text scoreText;
     [SerializeField] private Text livesText;
@@ -12,11 +15,17 @@ public sealed class GameManager : MonoBehaviour
     private Player player;
     private Invaders invaders;
     private MysteryShip mysteryShip;
-    private Bunker[] bunkers;
 
     private int score;
     private int lives;
 
+    public AudioClip enemyShootSound;
+    public AudioClip enemyDeathSound;
+    public AudioClip playerShootSound;
+    public AudioClip playerDeathSound;
+        
+    public AudioSource audioSource;
+    
     public int Score => score;
     public int Lives => lives;
 
@@ -35,8 +44,8 @@ public sealed class GameManager : MonoBehaviour
         player = FindObjectOfType<Player>();
         invaders = FindObjectOfType<Invaders>();
         mysteryShip = FindObjectOfType<MysteryShip>();
-        bunkers = FindObjectsOfType<Bunker>();
-
+        audioSource = GetComponent<AudioSource>();
+        
         NewGame();
     }
 
@@ -60,10 +69,6 @@ public sealed class GameManager : MonoBehaviour
     {
         invaders.ResetInvaders();
         invaders.gameObject.SetActive(true);
-
-        for (int i = 0; i < bunkers.Length; i++) {
-            bunkers[i].ResetBunker();
-        }
 
         Respawn();
     }
@@ -96,8 +101,13 @@ public sealed class GameManager : MonoBehaviour
 
     public void OnPlayerKilled(Player player)
     {
+        audioSource.PlayOneShot(playerDeathSound);
+        
         SetLives(lives - 1);
 
+        var explosionObject = Instantiate(explosion, player.gameObject.transform.position, Quaternion.identity);
+        StartCoroutine(DestroyAfterAnim(explosionObject));
+        
         player.gameObject.SetActive(false);
 
         if (lives > 0) {
@@ -106,9 +116,20 @@ public sealed class GameManager : MonoBehaviour
             GameOver();
         }
     }
+    
+    private IEnumerator DestroyAfterAnim(GameObject explosionObject)
+    {
+        yield return new WaitForSeconds(0.3f);
+        Destroy(explosionObject);
+    }
 
     public void OnInvaderKilled(Invader invader)
     {
+        audioSource.PlayOneShot(enemyDeathSound);
+        
+        var explosionObject = Instantiate(explosion, invader.gameObject.transform.position, Quaternion.identity);
+        StartCoroutine(DestroyAfterAnim(explosionObject));
+
         invader.gameObject.SetActive(false);
 
         SetScore(score + invader.score);

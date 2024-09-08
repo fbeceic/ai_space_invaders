@@ -89,7 +89,8 @@ namespace Txt2Img.ThemedTxt2Img
                 PromptTheme.Background => (1.0f, 1.0f),
                 PromptTheme.Enemy => (0.5f, 0.5f),
                 PromptTheme.BossEnemy => (1.1f, 1.1f),
-                PromptTheme.Player or PromptTheme.UIBackground or PromptTheme.UIButton => (1.0f, 1.0f),
+                PromptTheme.Player => (0.6f, 0.6f),
+                PromptTheme.UIBackground or PromptTheme.UIButton => (1.0f, 1.0f),
                 _ => (1.0f, 1.0f)
             };
     }
