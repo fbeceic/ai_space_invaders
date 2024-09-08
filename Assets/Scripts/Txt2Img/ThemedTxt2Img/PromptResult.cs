@@ -141,6 +141,7 @@ namespace Txt2Img.ThemedTxt2Img
             {
                 textGameObject.gameObject.GetComponent<TextMeshProUGUI>().text = promptText + "\n" + "(" + theme.ToThemeString() + ")";
                 text = promptText;
+                AIManager.Instance.PromptResults[theme].Text = promptText;
             }
             catch (UnassignedReferenceException)
             {
