@@ -33,7 +33,7 @@ namespace Txt2Img
             };
             themeHeader.text = "Reprompt - " + _prompt.Theme.ToThemeString();
             promptImage.sprite = _prompt.Result;
-            promptInput.text = _prompt.Text;
+            promptInput.text = _prompt.Text == Constants.DefaultElementPlaceholder ? "" : _prompt.Text;
         
             var placeholder = (TextMeshProUGUI)promptInput.placeholder;
             placeholder.text = "(describe the " + _prompt.Theme.ToThemeString().ToLower() + ")";
@@ -48,7 +48,7 @@ namespace Txt2Img
 
         private IEnumerator ProcessRepromptingAndApplyResult()
         {
-            yield return StartCoroutine(modalPromptResult.ProcessReprompting(enhancePromptToggle.isOn));
+            yield return modalPromptResult.ProcessReprompting(enhancePromptToggle.isOn);
 
             var editingPromptResult = AIManager.Instance.editingPromptResult;
             editingPromptResult.imageGameObject.GetComponent<Image>().sprite = modalPromptResult.imageGameObject.GetComponent<Image>().sprite;
@@ -57,13 +57,8 @@ namespace Txt2Img
 
         public void CloseModal() 
         {
-            StartCoroutine(CloseAfterDelay(0.2f));  
-        }
-
-        private IEnumerator CloseAfterDelay(float delay)
-        {
-            yield return new WaitForSeconds(delay);
             gameObject.SetActive(false);
+            AIManager.Instance.editingPromptResult = null;
         }
     }
 }

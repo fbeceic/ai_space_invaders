@@ -34,8 +34,8 @@ namespace Txt2Img.Util
                 yield return null;
             }
             
-            promptResult.ApplyPromptLabel(prompt);
             promptResult.SaveSpriteToAIManager();
+            promptResult.ApplyPromptLabel(prompt);
 
             if (promptResult.theme is PromptTheme.UIBackground)
             {

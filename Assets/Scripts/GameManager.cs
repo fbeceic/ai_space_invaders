@@ -142,6 +142,9 @@ public sealed class GameManager : MonoBehaviour
     public void OnMysteryShipKilled(MysteryShip mysteryShip)
     {
         SetScore(score + mysteryShip.score);
+        var explosionObject = Instantiate(explosion, mysteryShip.gameObject.transform.position, Quaternion.identity);
+        mysteryShip.Despawn(true);
+        StartCoroutine(DestroyAfterAnim(explosionObject));
     }
 
     public void OnBoundaryReached()

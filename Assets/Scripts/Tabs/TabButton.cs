@@ -11,11 +11,10 @@ public class TabButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHandl
     public TabGroup tabGroup;
     public UnityEvent onTabSelected;
     public UnityEvent onTabDeselected;
-    
+
     private AudioSource audioSource;
 
-    [HideInInspector]
-    public Image background;
+    [HideInInspector] public Image background;
 
     void Awake()
     {
@@ -25,17 +24,26 @@ public class TabButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHandl
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        tabGroup.OnTabSelected(this);
+        if (AIManager.Instance.editingPromptResult == null)
+        {
+            tabGroup.OnTabSelected(this);
+        }
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        tabGroup.OnTabEnter(this);
+        if (AIManager.Instance.editingPromptResult == null)
+        {
+            tabGroup.OnTabEnter(this);
+        }
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        tabGroup.OnTabExit(this);
+        if (AIManager.Instance.editingPromptResult == null)
+        {
+            tabGroup.OnTabExit(this);
+        }
     }
 
     public void Select()
@@ -53,8 +61,5 @@ public class TabButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHandl
         {
             onTabSelected.Invoke();
         }
-
     }
-
-
 }

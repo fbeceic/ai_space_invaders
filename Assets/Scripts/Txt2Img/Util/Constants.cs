@@ -13,6 +13,8 @@ namespace Txt2Img.Util
         
         public const int GeneratedBackgroundWidth = 1024;
         public const int GeneratedBackgroundHeight = 1024;
+
+        public static readonly string DefaultElementPlaceholder = "DEFAULT ELEMENT"; 
         
         public static string GeneratedImagesOutputFolder = Path.Combine(Application.streamingAssetsPath, "SDImages");
     }

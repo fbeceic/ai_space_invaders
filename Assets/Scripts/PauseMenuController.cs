@@ -21,12 +21,14 @@ public class PauseMenuController : MonoBehaviour
     {
         MenuManager.Instance.menuToShow = 0;
         SceneManager.LoadScene("Prompt Menu");
+        Time.timeScale = 1f;
     }
 
     void OnElementsMenuButtonClick()
     {
         MenuManager.Instance.menuToShow = 1;
         SceneManager.LoadScene("Prompt Menu");
+        Time.timeScale = 1f;
     }
 
     void OnExitButtonClick()

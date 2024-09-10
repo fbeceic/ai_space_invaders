@@ -37,7 +37,6 @@ namespace Txt2Img.ThemedTxt2Img
 
         private void Start()
         {
-            //SaveSpriteToAIManager();
             tabGroup = FindObjectOfType<TabGroup>();
             diffusionGenerator = imageGameObject.gameObject.GetComponent<StableDiffusionText2Image>();
             if (AIManager.Instance.editingPromptResult == null)
@@ -54,7 +53,7 @@ namespace Txt2Img.ThemedTxt2Img
                 var savedPromptImage = savedPromptResult[theme].Result;
                 var savedPromptText = savedPromptResult[theme].Text;
                 imageGameObject.GetComponent<Image>().sprite = savedPromptImage;
-                ApplyPromptLabel(savedPromptText.Length > 0 ? savedPromptText : "DEFAULT ELEMENT");
+                ApplyPromptLabel(savedPromptText.Length > 0 ? savedPromptText : Constants.DefaultElementPlaceholder);
             }
         }
 

@@ -19,7 +19,11 @@ namespace Txt2Img.ThemedTxt2Img
 
         [SerializeField] private List<Prompt> inputPrompts;
 
-
+        private void Awake()
+        {
+            DontDestroyOnLoad(gameObject);
+        }
+        
         void Update()
         {
             if (MenuManager.Instance.currentMenu == 0)

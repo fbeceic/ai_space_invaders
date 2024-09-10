@@ -89,7 +89,7 @@ public class MysteryShip : MonoBehaviour
         spawned = true;
     }
 
-    private void Despawn(bool playSound)
+    public void Despawn(bool playSound)
     {
         if (playSound)
         {
@@ -115,7 +115,6 @@ public class MysteryShip : MonoBehaviour
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Laser"))
         {
-            Despawn(true);
             GameManager.Instance.OnMysteryShipKilled(this);
         }
     }

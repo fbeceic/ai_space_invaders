@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,20 +14,44 @@ public sealed class MenuManager : MonoBehaviour
 
     public int menuToShow = 0;
 
-    private void Awake()
+    void Awake()
     {
-        if (Instance != null)
+        var menuObjects = GameObject.FindGameObjectsWithTag("MenuManager");
+        var _menuToShow = 0; 
+        if (menuObjects.Length > 1)
         {
-            return;
+            foreach (var managerObj in menuObjects)
+            {
+                var manager = managerObj.GetComponent<MenuManager>();
+
+                if (manager.menus != null && manager.menus.Count > 0)
+                {
+                    if (Instance != null && Instance != manager)
+                    {
+                        _menuToShow = Instance.menuToShow;
+                        Destroy(Instance.gameObject);
+                    }
+
+                    Instance = manager;
+                }
+                else
+                {
+                    if (manager != Instance)
+                    {
+                        Destroy(managerObj);
+                    }
+                }
+            }
+
+            DontDestroyOnLoad(Instance.gameObject);
+        }
+        else
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
-    }
-
-    void Start()
-    {
-        ShowMenu(Instance.menuToShow);
+        ShowMenu(_menuToShow);
     }
 
     public void ShowMenu(int index)

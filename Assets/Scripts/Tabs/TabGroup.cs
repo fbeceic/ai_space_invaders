@@ -9,7 +9,7 @@ public class TabGroup : MonoBehaviour
     public Color tabIdleColor;
     public Color tabHoverColor;
     public Color tabSelectedColor;
-    
+
     public TabButton selectedTab;
     private TabButton lastSelectedTab;
 
@@ -20,7 +20,7 @@ public class TabGroup : MonoBehaviour
         {
             if (tabButton.transform.GetSiblingIndex() == 0)
                 OnTabSelected(tabButton);
-        }            
+        }
     }
 
     public void OnTabEnter(TabButton tabButton)
@@ -44,7 +44,10 @@ public class TabGroup : MonoBehaviour
 
         selectedTab = tabButton;
 
-        selectedTab.Select();
+        if (AIManager.Instance.editingPromptResult == null)
+        {
+            selectedTab.Select();
+        }
 
         ResetTabs();
         tabButton.background.color = tabSelectedColor;
@@ -64,7 +67,7 @@ public class TabGroup : MonoBehaviour
 
     public void ResetTabs()
     {
-        foreach(TabButton tabButton in tabButtons)
+        foreach (TabButton tabButton in tabButtons)
         {
             if ((selectedTab != null) && (tabButton == selectedTab))
                 continue;
@@ -90,7 +93,7 @@ public class TabGroup : MonoBehaviour
     {
         if (tabButtons.Count >= 0)
         {
-            OnTabSelected(lastSelectedTab); 
+            OnTabSelected(lastSelectedTab);
         }
         else
         {
@@ -101,10 +104,10 @@ public class TabGroup : MonoBehaviour
     public void ToGalleryTab(TabButton fromTab)
     {
         lastSelectedTab = fromTab;
-        
+
         if (tabButtons.Count >= 3)
         {
-            OnTabSelected(tabButtons[2]); 
+            OnTabSelected(tabButtons[2]);
         }
         else
         {
